@@ -9,7 +9,6 @@ using Unity.Transforms;
 public partial struct SpawningSystem : ISystem
 {
     // OnCreate在System被创建时调用一次
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         // 关键点1: 设置更新条件

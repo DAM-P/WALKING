@@ -6,7 +6,6 @@ using Unity.Transforms;
 [BurstCompile]
 public partial struct RingRotationSystem : ISystem
 {
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<Spawner>();

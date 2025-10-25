@@ -6,7 +6,6 @@ using Unity.Transforms;
 [BurstCompile]
 public partial struct PlanetRotationSystem : ISystem
 {
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<Spawner>();

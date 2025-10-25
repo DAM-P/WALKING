@@ -8,3 +8,12 @@ public struct RingTag : IComponentData {}
 
 
 
+
+
+
+
+
+
+
+
+
