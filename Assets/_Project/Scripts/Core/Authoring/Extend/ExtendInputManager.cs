@@ -29,7 +29,7 @@ namespace Project.Core.Authoring
         public bool autoDisableMovement = false; // 改为 false，由协调器接管
 
         [Header("调试")]
-        public bool showDebugLog = true;
+        public bool showDebugLog = false;
 
         private EntityManager _entityManager;
         private Entity _currentSelectedEntity = Entity.Null;
@@ -318,6 +318,7 @@ namespace Project.Core.Authoring
         public int3 Direction;
         public int Length;
         public int ChainID;
+        public int StartIndex; // 渐进式生成的起始索引（0表示从第一个开始）
     }
 }
 

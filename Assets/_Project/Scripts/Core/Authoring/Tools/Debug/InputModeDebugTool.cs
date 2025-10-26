@@ -15,8 +15,8 @@ namespace Project.Core.Authoring
         public FirstPersonController playerController;
 
         [Header("Debug Settings")]
-        public bool enableDetailedLog = true;
-        public bool showGUI = true;
+        public bool enableDetailedLog = false;
+        public bool showGUI = false;
 
         private bool _lastPlayerControllerState = true;
         private int _clickAttempts = 0;

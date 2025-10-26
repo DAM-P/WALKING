@@ -9,9 +9,11 @@ namespace Project.Core.Authoring
     public class RaycastDebugger : MonoBehaviour
     {
         [Header("Settings")]
+        [Tooltip("启用射线调试")]
+        public bool enableDebug = false;
         public float raycastDistance = 100f;
         public LayerMask layerMask = ~0;
-        public bool showVisualRay = true;
+        public bool showVisualRay = false;
         public Color rayColor = Color.green;
         public float rayDuration = 0.5f;
 
@@ -26,7 +28,7 @@ namespace Project.Core.Authoring
 
         void Update()
         {
-            if (mainCamera == null) return;
+            if (!enableDebug || mainCamera == null) return;
 
             // 每帧进行射线检测
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -125,6 +127,8 @@ namespace Project.Core.Authoring
 
         void OnGUI()
         {
+            if (!enableDebug) return;
+
             GUILayout.BeginArea(new Rect(10, 10, 300, 100));
             GUILayout.Box("射线检测调试器", GUILayout.Width(300));
             

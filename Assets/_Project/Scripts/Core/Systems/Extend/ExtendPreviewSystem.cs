@@ -95,26 +95,44 @@ namespace Project.Core.Systems
                         float3 cubePos = startPos + direction * i;
                         bool isValid = i <= preview.ValidLength;
 
-                        // 绘制方块轮廓
-                        Color color = isValid ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
+                        // 绘制方块轮廓（增强效果）
+                        Color color = isValid ? new Color(0f, 1f, 0f, 0.6f) : new Color(1f, 0f, 0f, 0.6f);
                         DrawWireCube(cubePos, 0.95f, color);
+                        
+                        // 添加填充效果（更醒目）
+                        if (isValid)
+                        {
+                            DrawWireCube(cubePos, 0.85f, new Color(0f, 1f, 0f, 0.3f));
+                        }
 
-                        // 绘制连接线
+                        // 绘制连接线（加粗）
                         if (i == 1)
                         {
                             Debug.DrawLine(startPos, cubePos, color);
+                            // 加粗效果：绘制多条平行线
+                            Debug.DrawLine(startPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color);
                         }
                         else
                         {
                             float3 prevPos = startPos + direction * (i - 1);
                             Debug.DrawLine(prevPos, cubePos, color);
+                            Debug.DrawLine(prevPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color);
                         }
                     }
 
-                    // 绘制方向指示箭头
-                    float3 arrowStart = startPos + direction * 0.5f;
-                    float3 arrowEnd = startPos + direction * 1.2f;
+                    // 绘制方向指示箭头（增强版）
+                    float3 arrowStart = startPos + direction * 0.3f;
+                    float3 arrowEnd = startPos + direction * 1.5f;
                     Debug.DrawLine(arrowStart, arrowEnd, Color.yellow);
+                    
+                    // 箭头头部
+                    float3 perpendicular = math.cross(direction, new float3(0, 1, 0));
+                    if (math.lengthsq(perpendicular) < 0.1f)
+                        perpendicular = math.cross(direction, new float3(1, 0, 0));
+                    perpendicular = math.normalize(perpendicular) * 0.2f;
+                    
+                    Debug.DrawLine(arrowEnd, arrowEnd - direction * 0.3f + perpendicular, Color.yellow);
+                    Debug.DrawLine(arrowEnd, arrowEnd - direction * 0.3f - perpendicular, Color.yellow);
 
                 }).Run();
         }

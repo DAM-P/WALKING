@@ -1398,7 +1398,7 @@ GameObject:
   - component: {fileID: 588930739}
   - component: {fileID: 588930738}
   - component: {fileID: 588930742}
-  - component: {fileID: 588930741}
+  - component: {fileID: 588930743}
   m_Layer: 0
   m_Name: SelectionManager
   m_TagString: Untagged
@@ -1420,7 +1420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionManager: {fileID: 588930739}
   deselectKey: 27
-  showDebugInfo: 1
+  showDebugInfo: 0
 --- !u!114 &588930739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1458,7 +1458,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1835482062}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &588930741
+--- !u!114 &588930742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1474,7 +1474,7 @@ MonoBehaviour:
   autoFixSelectionLayerMask: 1
   autoCheckProxyActive: 1
   targetLayerName: Interactable
---- !u!114 &588930742
+--- !u!114 &588930743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1483,9 +1483,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 588930737}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1b3cb1c5eeeab46950067223254755, type: 3}
+  m_Script: {fileID: 11500000, guid: 01a85a13faefa9c45a5be2809c1c29f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1495651372}
+  maxBlocksPerFrame: 4
+  maxExtendLength: 16
+  raycastDistance: 100
+  rayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  showDebug: 1
+  drawGhostAtEnd: 1
+  drawBaselineAndRay: 1
+  useHitNormal: 0
+  axisSnapAngleDeg: 32.3
+  allowScrollAxisCycle: 0
+  preferDragDirection: 1
+  dragPickThreshold: 6.4
 --- !u!1001 &656501576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1560,6 +1575,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 25d333c89f05628469dedaaf86587620, type: 3}
       insertIndex: -1
       addedObject: {fileID: 782061028}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 25d333c89f05628469dedaaf86587620, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 782061033}
   m_SourcePrefab: {fileID: 100100000, guid: 25d333c89f05628469dedaaf86587620, type: 3}
 --- !u!1 &782061027 stripped
 GameObject:
@@ -1626,6 +1644,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 25d333c89f05628469dedaaf86587620, type: 3}
   m_PrefabInstance: {fileID: 656501576}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &782061033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782061027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbb0ea5365efc5746b4e8d787f54b745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 0.9}
+  lineLength: 12
+  lineThickness: 2
+  gap: 4
+  hideSystemCursorInPlayMode: 1
+  onlyWhenLocked: 0
+  showDebugBounds: 0
 --- !u!1 &1495651370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,6 +1829,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2144987641}
   - {fileID: 205709775}
   - {fileID: 2106167597}
   - {fileID: 588930740}
@@ -2043,6 +2081,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144987641}
   - component: {fileID: 2144987640}
+  - component: {fileID: 2144987642}
   m_Layer: 0
   m_Name: ExtendInputManager
   m_TagString: Untagged
@@ -2057,7 +2096,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144987639}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31f92f7ff8e81e646a6dd9c8d9ac28ea, type: 3}
   m_Name: 
@@ -2076,13 +2115,35 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144987639}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3799744, y: 2.4185486, z: -5.3137302}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1835482062}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2144987642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144987639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a59ed17ce7f9b034e8297b6b526a9e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectionManager: {fileID: 588930739}
+  extendInputManager: {fileID: 2144987640}
+  crosshairExtendManager: {fileID: 588930743}
+  playerController: {fileID: 782061028}
+  parkourMode: 1
+  allowMovementWhileExtending: 1
+  lockCursorInMoveMode: 1
+  showCursorInExtendMode: 1
+  hideCursorOnMouseDragExtend: 1
+  showDebugLog: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2096,4 +2157,3 @@ SceneRoots:
   - {fileID: 569686748}
   - {fileID: 18873473}
   - {fileID: 1835482062}
-  - {fileID: 2144987641}

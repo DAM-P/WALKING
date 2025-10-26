@@ -89,11 +89,11 @@ namespace Project.Core.Authoring
                 TrySelectCube();
             }
 
-            // 右键或 ESC 取消选择
-            if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+            // ESC 取消选择（右键不再用于取消，避免与功能键冲突）
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (showDetailedLog)
-                    Debug.Log("[Selection] 检测到取消选择输入");
+                    Debug.Log("[Selection] 检测到 ESC 取消选择输入");
                 DeselectAll();
             }
 

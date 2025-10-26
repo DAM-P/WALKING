@@ -52,9 +52,11 @@ namespace Project.Core.Systems
                     // 计算起点坐标
                     int3 startPos = new int3(math.round(rootTransform.Position));
 
-                    // 生成 Cube 链
+                    // 生成 Cube 链（支持从 StartIndex 继续增量生成）
                     int successCount = 0;
-                    for (int i = 1; i <= request.Length; i++)
+                    int startIndex = math.max(0, request.StartIndex);
+                    int endIndex = startIndex + math.max(0, request.Length);
+                    for (int i = startIndex + 1; i <= endIndex; i++)
                     {
                         int3 cubeGridPos = startPos + request.Direction * i;
 
@@ -115,14 +117,17 @@ namespace Project.Core.Systems
                         successCount++;
                     }
 
-                    // 更新可拉伸标记
-                    extendable.CurrentExtensions++;
+                    // 更新可拉伸标记：仅当从0开始生成时，认为新开一条链
+                    if (startIndex == 0 && successCount > 0)
+                    {
+                        extendable.CurrentExtensions++;
+                    }
 
                     // 移除执行请求和预览
                     ecb.RemoveComponent<ExtendExecutionRequest>(rootEntity);
                     ecb.RemoveComponent<ExtendPreview>(rootEntity);
 
-                    Debug.Log($"<color=green>[ExtendExecutionSystem]</color> 成功拉伸 {successCount} 个 Cube，方向={request.Direction}，ChainID={request.ChainID}");
+                    Debug.Log($"<color=green>[ExtendExecutionSystem]</color> 成功增量生成 {successCount} 个 Cube，范围=({startIndex+1}..{endIndex})，方向={request.Direction}，ChainID={request.ChainID}");
 
                 }).Run();
 
