@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Project.Core.Components;
+using Project.Core.Authoring.Debugging;
 
 namespace Project.Core.Systems
 {
@@ -14,8 +15,11 @@ namespace Project.Core.Systems
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public partial class ExtendPreviewSystem : SystemBase
     {
+        public static bool PreviewEnabled = true; // 开启预览计算（Game 视图需由 Drawer 渲染）
         protected override void OnUpdate()
         {
+            if (!PreviewEnabled)
+                return;
             // 获取空间哈希表
             if (!SystemAPI.TryGetSingleton<OccupiedCubeMap>(out var cubeMap))
                 return;
@@ -45,7 +49,7 @@ namespace Project.Core.Systems
 
                 }).WithoutBurst().Run();
 
-            // 绘制预览（仅在编辑器模式或开发构建中）
+            // 绘制预览
             DrawPreview();
         }
 
@@ -108,22 +112,22 @@ namespace Project.Core.Systems
                         // 绘制连接线（加粗）
                         if (i == 1)
                         {
-                            Debug.DrawLine(startPos, cubePos, color);
+                            DebugDraw.DrawLine(startPos, cubePos, color, 0f, true, DebugDraw.Channel.ExtendPreview);
                             // 加粗效果：绘制多条平行线
-                            Debug.DrawLine(startPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color);
+                            DebugDraw.DrawLine(startPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color, 0f, true, DebugDraw.Channel.ExtendPreview);
                         }
                         else
                         {
                             float3 prevPos = startPos + direction * (i - 1);
-                            Debug.DrawLine(prevPos, cubePos, color);
-                            Debug.DrawLine(prevPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color);
+                            DebugDraw.DrawLine(prevPos, cubePos, color, 0f, true, DebugDraw.Channel.ExtendPreview);
+                            DebugDraw.DrawLine(prevPos + new float3(0.05f, 0, 0), cubePos + new float3(0.05f, 0, 0), color, 0f, true, DebugDraw.Channel.ExtendPreview);
                         }
                     }
 
                     // 绘制方向指示箭头（增强版）
                     float3 arrowStart = startPos + direction * 0.3f;
                     float3 arrowEnd = startPos + direction * 1.5f;
-                    Debug.DrawLine(arrowStart, arrowEnd, Color.yellow);
+                    DebugDraw.DrawLine(arrowStart, arrowEnd, Color.yellow, 0f, true, DebugDraw.Channel.ExtendPreview);
                     
                     // 箭头头部
                     float3 perpendicular = math.cross(direction, new float3(0, 1, 0));
@@ -131,8 +135,8 @@ namespace Project.Core.Systems
                         perpendicular = math.cross(direction, new float3(1, 0, 0));
                     perpendicular = math.normalize(perpendicular) * 0.2f;
                     
-                    Debug.DrawLine(arrowEnd, arrowEnd - direction * 0.3f + perpendicular, Color.yellow);
-                    Debug.DrawLine(arrowEnd, arrowEnd - direction * 0.3f - perpendicular, Color.yellow);
+                    DebugDraw.DrawLine(arrowEnd, arrowEnd - direction * 0.3f + perpendicular, Color.yellow, 0f, true, DebugDraw.Channel.ExtendPreview);
+                    DebugDraw.DrawLine(arrowEnd, arrowEnd - direction * 0.3f - perpendicular, Color.yellow, 0f, true, DebugDraw.Channel.ExtendPreview);
 
                 }).Run();
         }
@@ -158,22 +162,22 @@ namespace Project.Core.Systems
             };
 
             // 底面 (0-1-2-3)
-            Debug.DrawLine(vertices[0], vertices[1], color);
-            Debug.DrawLine(vertices[1], vertices[2], color);
-            Debug.DrawLine(vertices[2], vertices[3], color);
-            Debug.DrawLine(vertices[3], vertices[0], color);
+            DebugDraw.DrawLine(vertices[0], vertices[1], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[1], vertices[2], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[2], vertices[3], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[3], vertices[0], color, 0f, true, DebugDraw.Channel.ExtendPreview);
 
             // 顶面 (4-5-6-7)
-            Debug.DrawLine(vertices[4], vertices[5], color);
-            Debug.DrawLine(vertices[5], vertices[6], color);
-            Debug.DrawLine(vertices[6], vertices[7], color);
-            Debug.DrawLine(vertices[7], vertices[4], color);
+            DebugDraw.DrawLine(vertices[4], vertices[5], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[5], vertices[6], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[6], vertices[7], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[7], vertices[4], color, 0f, true, DebugDraw.Channel.ExtendPreview);
 
             // 垂直边 (0-4, 1-5, 2-6, 3-7)
-            Debug.DrawLine(vertices[0], vertices[4], color);
-            Debug.DrawLine(vertices[1], vertices[5], color);
-            Debug.DrawLine(vertices[2], vertices[6], color);
-            Debug.DrawLine(vertices[3], vertices[7], color);
+            DebugDraw.DrawLine(vertices[0], vertices[4], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[1], vertices[5], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[2], vertices[6], color, 0f, true, DebugDraw.Channel.ExtendPreview);
+            DebugDraw.DrawLine(vertices[3], vertices[7], color, 0f, true, DebugDraw.Channel.ExtendPreview);
         }
     }
 }

@@ -21,7 +21,7 @@ MonoBehaviour:
   emissionIntensity: 1.2
   colliderType: 1
   mergeMode: 2
-  playerSpawnPoint: {x: 4.5, y: 5, z: 0}
+  playerSpawnPoint: {x: 0, y: 2, z: 0}
   cameraPosition: {x: 0, y: 0, z: 0}
   resetCamera: 0
   transitionDuration: 1

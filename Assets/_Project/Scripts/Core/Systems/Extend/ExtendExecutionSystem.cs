@@ -21,6 +21,13 @@ namespace Project.Core.Systems
     {
         protected override void OnUpdate()
         {
+            // 若本帧没有任何执行请求，直接返回，避免无意义开销
+            var reqQuery = SystemAPI.QueryBuilder().WithAll<ExtendExecutionRequest>().Build();
+            if (reqQuery.CalculateEntityCount() == 0)
+            {
+                return;
+            }
+
             // 获取设置
             if (!SystemAPI.TryGetSingleton<ExtendSettings>(out var settings))
             {
@@ -107,9 +114,22 @@ namespace Project.Core.Systems
                         // 添加实例颜色（URP）
                         if (settings.ApplyInstanceColor)
                         {
+                            // 在默认颜色基础上做轻微亮度扰动（±3%），提升可读性且不破坏合批
+                            const float jitterStrength = 0.03f; // 可按需调小/调大
+
+                            // 生成确定性随机（基于 ChainID 与索引 i），确保可复现
+                            uint seed = (uint)(request.ChainID * 73856093 ^ i * 19349663);
+                            var rand = Unity.Mathematics.Random.CreateFromIndex(seed);
+                            float jitter = rand.NextFloat(-jitterStrength, jitterStrength);
+
+                            float4 baseColor = settings.DefaultColor;
+                            float3 rgb = baseColor.xyz * (1f + jitter);
+                            // 夹紧到 [0,1]
+                            rgb = math.saturate(rgb);
+
                             ecb.AddComponent(newCube, new URPMaterialPropertyBaseColor
                             {
-                                Value = settings.DefaultColor
+                                Value = new float4(rgb, baseColor.w)
                             });
                         }
 #endif
@@ -127,7 +147,8 @@ namespace Project.Core.Systems
                     ecb.RemoveComponent<ExtendExecutionRequest>(rootEntity);
                     ecb.RemoveComponent<ExtendPreview>(rootEntity);
 
-                    Debug.Log($"<color=green>[ExtendExecutionSystem]</color> 成功增量生成 {successCount} 个 Cube，范围=({startIndex+1}..{endIndex})，方向={request.Direction}，ChainID={request.ChainID}");
+                    // 可选日志：注释以避免频繁打印
+                    // Debug.Log($"[ExtendExecution] +{successCount} cubes axis={request.Direction} range=({startIndex+1}..{endIndex}) chain={request.ChainID}");
 
                 }).Run();
 

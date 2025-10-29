@@ -138,8 +138,16 @@ namespace Project.Core.Authoring
                     int3 startPos = (int3)math.round(rootT2.Position);
                     int clampedTarget = math.clamp(targetLen, 0, maxExtendLength);
                     _currentPreviewLen = ValidateTargetLength(startPos, _axisDir, clampedTarget);
+                    // 在 Game 视图内画线：使用 Debug.DrawLine 也能显示（勾选 Gizmos 按钮）
+                    // 若希望无需 Gizmos 也可见，建议改为 Graphics.DrawMesh 或在 URP 下写一个简单的线框渲染器
                     float3 startPosF = rootT2.Position;
-                    DrawPreviewChain(startPosF, _axisDir, _currentPreviewLen, new Color(0.2f, 0.6f, 1f, 0.8f));
+                    for (int i = 1; i <= _currentPreviewLen; i++)
+                    {
+                        float3 pos = startPosF + (float3)_axisDir * i;
+                        DrawWireCube(pos, 0.98f, new Color(0.2f, 0.6f, 1f, 0.8f));
+                        float3 prev = i == 1 ? startPosF : startPosF + (float3)_axisDir * (i - 1);
+                        Project.Core.Authoring.Debugging.DebugDraw.DrawLine(prev, pos, new Color(0.2f, 0.6f, 1f, 0.8f), 0f, true, Project.Core.Authoring.Debugging.DebugDraw.Channel.ExtendPreview);
+                    }
                 }
             }
             // 左键松开：结束
@@ -192,7 +200,7 @@ namespace Project.Core.Authoring
                 }
             }
 
-            // 调试：绘制基线与视线
+            // 调试：绘制基线与视线（发布时可统一关闭）
             if (showDebug && drawBaselineAndRay)
             {
                 DrawAxisAndRayDebug();

@@ -29,6 +29,12 @@ namespace Project.Core.Authoring
         [Header("物理")]
         [Tooltip("是否自动为拉伸的 Cube 添加 BoxCollider")]
         public bool autoAddCollider = true;
+
+        [Tooltip("启用 Collider 的半径（米）。仅玩家附近启用，远处禁用")]
+        public float colliderActiveRadius = 25f;
+
+        [Tooltip("迟滞范围，避免边界抖动（米）")]
+        public float colliderDeactivateHysteresis = 3f;
     }
 
     public class ExtendSettingsBaker : Baker<ExtendSettingsAuthoring>
@@ -54,7 +60,9 @@ namespace Project.Core.Authoring
                     authoring.defaultColor.b,
                     authoring.defaultColor.a
                 ),
-                AutoAddCollider = authoring.autoAddCollider
+                AutoAddCollider = authoring.autoAddCollider,
+                ColliderActiveRadius = authoring.colliderActiveRadius,
+                ColliderDeactivateHysteresis = authoring.colliderDeactivateHysteresis
             });
         }
     }

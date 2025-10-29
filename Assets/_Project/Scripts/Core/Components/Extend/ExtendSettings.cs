@@ -33,6 +33,25 @@ namespace Project.Core.Components
         /// 是否自动添加 BoxCollider
         /// </summary>
         public bool AutoAddCollider;
+
+        /// <summary>
+        /// 启用 Collider 的半径（米/世界单位）。仅玩家附近启用，远处禁用
+        /// </summary>
+        public float ColliderActiveRadius;
+
+        /// <summary>
+        /// 迟滞范围，避免边界来回抖动（米）
+        /// </summary>
+        public float ColliderDeactivateHysteresis;
+    }
+
+    public static class ExtendSettingsExtensions
+    {
+        // 兼容旧资产：若未设置，给默认值
+        public static float CubeColliderActiveRadiusFallback(this in ExtendSettings s)
+        {
+            return s.ColliderActiveRadius > 0f ? s.ColliderActiveRadius : 25f;
+        }
     }
 }
 

@@ -23,9 +23,12 @@ namespace Project.Core.Systems
                 .Build();
 
             // 初始化 Singleton
+            var estimatedCount = _cubeQuery.CalculateEntityCount();
+            int initialCapacity = math.max(1024, estimatedCount * 2 + 256);
             var singleton = new OccupiedCubeMap
             {
-                Map = new NativeParallelHashMap<int3, Entity>(1000, Allocator.Persistent),
+                // 提高初始容量，避免并行写入时容量不足
+                Map = new NativeParallelHashMap<int3, Entity>(math.max(initialCapacity, 4096), Allocator.Persistent),
                 IsInitialized = true
             };
             var singletonEntity = state.EntityManager.CreateEntity();

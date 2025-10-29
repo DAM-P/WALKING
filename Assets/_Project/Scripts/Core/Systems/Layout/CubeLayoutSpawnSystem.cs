@@ -81,20 +81,10 @@ namespace Project.Core.Systems
                         if (math.all(baseColor == float4.zero)) baseColor = new float4(0.75f, 0.75f, 0.75f, 1f);
                         ecb.AddComponent(e, new URPMaterialPropertyBaseColor { Value = baseColor });
 
-                        // Emission 逻辑：
-                        // - 可交互方块：添加 Emission 组件（初始为 0，由 HighlightRenderSystem 控制）
-                        // - 非可交互方块：仅当 EmissionIntensity > 0 时添加基础发光
+                        // Emission 逻辑：仅对可交互方块添加，且初始为 0，由高亮系统控制
                         if (isInteractable)
                         {
-                            // 可交互方块：初始无发光，选中后由系统控制
                             ecb.AddComponent(e, new URPMaterialPropertyEmissionColor { Value = float4.zero });
-                        }
-                        else if (spawner.ValueRO.EmissionIntensity > 0f)
-                        {
-                            // 非可交互方块：基础发光（如果配置了 EmissionIntensity）
-                            var emission = baseColor * spawner.ValueRO.EmissionIntensity;
-                            emission.w = 1f;
-                            ecb.AddComponent(e, new URPMaterialPropertyEmissionColor { Value = emission });
                         }
                     }
 #endif

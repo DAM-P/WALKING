@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Project.Core.Authoring;
 using UnityEngine.Rendering;
+using System.IO;
 
 namespace Project.Editor.GridBrush
 {
@@ -15,12 +17,21 @@ namespace Project.Editor.GridBrush
         private Color _color = Color.white;
         private bool _erase;
         private bool _snapToGround = false;
+        private bool _paintVerticalLine = false; // 是否绘制垂直线
+        private int _verticalLineHeight = 3; // 垂直线高度（格）
         private bool _requireHoldKey = true; // 仅按住 B 键时启用画刷
         private static bool _isActivationKeyHeld = false;
         private bool _drawLayout = true; // 是否渲染整个布局
         private float _layoutAlpha = 0.18f; // 布局渲染的不透明度
+		private const string ColorHistoryPrefsKey = "Project.GridBrush.ColorHistory";
+		private const int MaxColorHistory = 16;
+		private readonly List<Color> _colorHistory = new List<Color>();
 
         private readonly HashSet<Vector3Int> _previewCells = new HashSet<Vector3Int>();
+		private bool _hasHover;
+		private Vector3Int _hoverCoord;
+		private bool _hasHoverCell;
+		private CubeLayout.Cell _hoverCell;
 
         [MenuItem("Tools/Grid Brush")] 
         public static void Open()
@@ -33,11 +44,13 @@ namespace Project.Editor.GridBrush
         private void OnEnable()
         {
             SceneView.duringSceneGui += OnSceneGUI;
+			LoadColorHistory();
         }
 
         private void OnDisable()
         {
             SceneView.duringSceneGui -= OnSceneGUI;
+			SaveColorHistory();
         }
 
         private void OnGUI()
@@ -56,8 +69,20 @@ namespace Project.Editor.GridBrush
 
             _brushSize = EditorGUILayout.IntSlider("Brush Size", _brushSize, 1, 8);
             _typeId = EditorGUILayout.IntField("Type Id", _typeId);
-            _color = EditorGUILayout.ColorField("Color", _color);
+			var newColor = EditorGUILayout.ColorField("Color", _color);
+			if (newColor != _color)
+			{
+				_color = newColor;
+				AddColorToHistory(_color);
+				SaveColorHistory();
+			}
+			DrawColorHistoryGUI();
             _erase = EditorGUILayout.Toggle("Erase Mode", _erase);
+            _paintVerticalLine = EditorGUILayout.ToggleLeft("Paint Vertical Line (Y axis)", _paintVerticalLine);
+            if (_paintVerticalLine)
+            {
+                _verticalLineHeight = EditorGUILayout.IntSlider("Vertical Height", Mathf.Max(1, _verticalLineHeight), 1, 64);
+            }
             _snapToGround = EditorGUILayout.ToggleLeft("Snap To Ground (raycast down)", _snapToGround);
             _requireHoldKey = EditorGUILayout.ToggleLeft("Hold 'B' to activate brush", _requireHoldKey);
             _drawLayout = EditorGUILayout.ToggleLeft("Draw Layout Cells in Scene", _drawLayout);
@@ -69,11 +94,45 @@ namespace Project.Editor.GridBrush
                 {
                     CreateLayoutAsset();
                 }
-                if (_layout != null && GUILayout.Button("Clear"))
+                if (_layout != null)
                 {
-                    Undo.RecordObject(_layout, "Clear Cube Layout");
-                    _layout.cells.Clear();
-                    EditorUtility.SetDirty(_layout);
+                    bool hasAny = _layout.cells != null && _layout.cells.Count > 0;
+                    using (new EditorGUI.DisabledScope(!hasAny))
+                    {
+                        if (GUILayout.Button("Clear"))
+                        {
+                            ConfirmAndClearLayout();
+                        }
+                    }
+                }
+            }
+
+            // Hover 信息显示
+            using (new EditorGUILayout.VerticalScope("box"))
+            {
+                EditorGUILayout.LabelField("Hover Cell", EditorStyles.boldLabel);
+                if (_hasHover)
+                {
+                    EditorGUILayout.LabelField($"Coord: {_hoverCoord}");
+                    if (_hasHoverCell)
+                    {
+                        EditorGUILayout.LabelField($"typeId: {_hoverCell.typeId}");
+                        string hex = ColorUtility.ToHtmlStringRGBA(_hoverCell.color);
+                        using (new EditorGUILayout.HorizontalScope())
+                        {
+                            Rect r = GUILayoutUtility.GetRect(20, 20, GUILayout.Width(20), GUILayout.Height(20));
+                            EditorGUI.DrawRect(r, _hoverCell.color.a > 0.0001f ? (Color)_hoverCell.color : new Color(0.6f, 0.6f, 0.6f, 1f));
+                            EditorGUILayout.LabelField($"Color: #{hex}");
+                        }
+                    }
+                    else
+                    {
+                        EditorGUILayout.LabelField("此位置暂无方块");
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("将鼠标移动到 Scene 中的网格上以查看信息");
                 }
             }
 
@@ -99,6 +158,23 @@ namespace Project.Editor.GridBrush
                 DrawLayoutGizmos();
             }
 
+            // 更新 Hover 信息（不论是否激活）
+            Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+            bool hasHit = TryGetPlaneHit(ray, out var hitPoint);
+            Vector3Int snapped = default;
+            if (hasHit)
+            {
+                snapped = SnapToGrid(hitPoint, _layout.origin, _cellSize);
+                UpdateHover(snapped);
+            }
+
+            // 快捷键：按下 C 复制悬停格信息
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.C && _hasHover)
+            {
+                CopyHoverInfo();
+                e.Use();
+            }
+
             bool active = !_requireHoldKey || _isActivationKeyHeld;
             if (!active) return; // 未激活则不占用 SceneView 行为
 
@@ -109,10 +185,7 @@ namespace Project.Editor.GridBrush
             // 支持 ALT 进行场景旋转：按住 ALT 时不响应画刷
             if (e.alt) return;
 
-            Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-            if (!TryGetPlaneHit(ray, out var hitPoint)) return;
-
-            var snapped = SnapToGrid(hitPoint, _layout.origin, _cellSize);
+            if (!hasHit) return;
             UpdatePreview(snapped);
             DrawPreviewGizmos();
             SceneView.RepaintAll();
@@ -219,12 +292,23 @@ namespace Project.Editor.GridBrush
         private void UpdatePreview(Vector3Int center)
         {
             _previewCells.Clear();
-            int r = Mathf.Max(0, _brushSize - 1);
-            for (int x = -r; x <= r; x++)
-            for (int y = -r; y <= r; y++)
-            for (int z = -r; z <= r; z++)
+            if (_paintVerticalLine)
             {
-                _previewCells.Add(center + new Vector3Int(x, y, z));
+                int h = Mathf.Max(1, _verticalLineHeight);
+                for (int i = 0; i < h; i++)
+                {
+                    _previewCells.Add(center + new Vector3Int(0, i, 0));
+                }
+            }
+            else
+            {
+                int r = Mathf.Max(0, _brushSize - 1);
+                for (int x = -r; x <= r; x++)
+                for (int y = -r; y <= r; y++)
+                for (int z = -r; z <= r; z++)
+                {
+                    _previewCells.Add(center + new Vector3Int(x, y, z));
+                }
             }
         }
 
@@ -309,6 +393,170 @@ namespace Project.Editor.GridBrush
             AssetDatabase.Refresh();
             _layout = asset;
         }
+
+		private void UpdateHover(Vector3Int coord)
+		{
+			_hasHover = true;
+			_hoverCoord = coord;
+			int idx = _layout.cells.FindIndex(x => x.coord == coord);
+			_hasHoverCell = idx >= 0;
+			if (_hasHoverCell) _hoverCell = _layout.cells[idx];
+			Repaint();
+		}
+
+		private void CopyHoverInfo()
+		{
+			if (!_hasHover) return;
+			string text;
+			if (_hasHoverCell)
+			{
+				var c = _hoverCell.color.a > 0.0001f ? (Color)_hoverCell.color : new Color(0.6f, 0.6f, 0.6f, 1f);
+				string hex = ColorUtility.ToHtmlStringRGBA(c);
+				text = $"coord: ({_hoverCoord.x},{_hoverCoord.y},{_hoverCoord.z})\n" +
+				       $"typeId: {_hoverCell.typeId}\n" +
+				       $"color: #{hex}\n" +
+				       $"colorRGBA: ({c.r:F3},{c.g:F3},{c.b:F3},{c.a:F3})";
+			}
+			else
+			{
+				text = $"coord: ({_hoverCoord.x},{_hoverCoord.y},{_hoverCoord.z})\nempty: true";
+			}
+			EditorGUIUtility.systemCopyBuffer = text;
+			ShowNotification(new GUIContent("已复制悬停格信息"));
+		}
+
+		private void ConfirmAndClearLayout()
+		{
+			string title = "确认清空布局?";
+			string message = "此操作会删除当前布局中的所有方块数据。是否先创建备份?";
+			int option = EditorUtility.DisplayDialogComplex(title, message, "备份后清空", "取消", "直接清空");
+			if (option == 1) // 取消
+				return;
+
+			if (option == 0)
+			{
+				CreateBackupAsset();
+			}
+
+			Undo.RecordObject(_layout, "Clear Cube Layout");
+			_layout.cells.Clear();
+			EditorUtility.SetDirty(_layout);
+		}
+
+		private void CreateBackupAsset()
+		{
+			if (_layout == null) return;
+			string originalPath = AssetDatabase.GetAssetPath(_layout);
+			if (string.IsNullOrEmpty(originalPath))
+			{
+				// 对于未保存到资源的临时对象，提示用户保存
+				EditorUtility.DisplayDialog("无法备份", "布局尚未保存为资源文件，请先通过 'Create Layout Asset' 创建资源。", "好的");
+				return;
+			}
+
+			string dir = Path.GetDirectoryName(originalPath).Replace("\\", "/");
+			string file = Path.GetFileNameWithoutExtension(originalPath);
+			string ext = Path.GetExtension(originalPath);
+			string time = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+			string backupName = $"{file}_Backup_{time}{ext}";
+			string backupPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(dir, backupName));
+
+			// 深拷贝 ScriptableObject 实例
+			var copy = ScriptableObject.CreateInstance<CubeLayout>();
+			copy.cellSize = _layout.cellSize;
+			copy.origin = _layout.origin;
+			copy.cells = new List<CubeLayout.Cell>(_layout.cells);
+
+			AssetDatabase.CreateAsset(copy, backupPath);
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			EditorUtility.DisplayDialog("已创建备份", $"备份文件已保存:\n{backupPath}", "好的");
+		}
+
+		private void DrawColorHistoryGUI()
+		{
+			if (_colorHistory == null || _colorHistory.Count == 0)
+				return;
+
+			EditorGUILayout.LabelField("Recent Colors", EditorStyles.boldLabel);
+			using (new EditorGUILayout.HorizontalScope())
+			{
+				int count = Mathf.Min(_colorHistory.Count, MaxColorHistory);
+				for (int i = 0; i < count; i++)
+				{
+					var c = _colorHistory[i];
+					Rect r = GUILayoutUtility.GetRect(20, 20, GUILayout.Width(20), GUILayout.Height(20));
+					EditorGUI.DrawRect(r, c);
+					if (GUI.Button(r, GUIContent.none, GUIStyle.none))
+					{
+						_color = c;
+						Repaint();
+					}
+				}
+				GUILayout.FlexibleSpace();
+				if (GUILayout.Button("Clear", GUILayout.Width(60)))
+				{
+					_colorHistory.Clear();
+					SaveColorHistory();
+				}
+			}
+		}
+
+		private void AddColorToHistory(Color c)
+		{
+			// 去重（近似比较），将新颜色移到最前
+			for (int i = _colorHistory.Count - 1; i >= 0; i--)
+			{
+				if (ColorsApproximatelyEqual(_colorHistory[i], c))
+				{
+					_colorHistory.RemoveAt(i);
+				}
+			}
+			_colorHistory.Insert(0, c);
+			if (_colorHistory.Count > MaxColorHistory)
+			{
+				_colorHistory.RemoveRange(MaxColorHistory, _colorHistory.Count - MaxColorHistory);
+			}
+		}
+
+		private static bool ColorsApproximatelyEqual(Color a, Color b)
+		{
+			const float eps = 1f / 255f;
+			return Mathf.Abs(a.r - b.r) < eps &&
+				   Mathf.Abs(a.g - b.g) < eps &&
+				   Mathf.Abs(a.b - b.b) < eps &&
+				   Mathf.Abs(a.a - b.a) < eps;
+		}
+
+		private void SaveColorHistory()
+		{
+			if (_colorHistory == null) return;
+			var parts = new List<string>(_colorHistory.Count);
+			for (int i = 0; i < _colorHistory.Count && i < MaxColorHistory; i++)
+			{
+				parts.Add(ColorUtility.ToHtmlStringRGBA(_colorHistory[i]));
+			}
+			string data = string.Join(",", parts.ToArray());
+			EditorPrefs.SetString(ColorHistoryPrefsKey, data);
+		}
+
+		private void LoadColorHistory()
+		{
+			_colorHistory.Clear();
+			string data = EditorPrefs.GetString(ColorHistoryPrefsKey, string.Empty);
+			if (string.IsNullOrEmpty(data)) return;
+			var parts = data.Split(',');
+			for (int i = 0; i < parts.Length && i < MaxColorHistory; i++)
+			{
+				var hex = parts[i];
+				if (string.IsNullOrEmpty(hex)) continue;
+				if (!hex.StartsWith("#")) hex = "#" + hex;
+				if (ColorUtility.TryParseHtmlString(hex, out var c))
+				{
+					_colorHistory.Add(c);
+				}
+			}
+		}
     }
 }
 

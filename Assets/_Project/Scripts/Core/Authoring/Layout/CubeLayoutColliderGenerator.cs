@@ -80,15 +80,19 @@ namespace Project.Core.Authoring
         [ContextMenu("Clear Colliders")]
         public void ClearColliders()
         {
-            var colliders = GetComponents<Collider>();
-            foreach (var col in colliders)
+            // 清除本对象及子层级的所有 Collider，避免旧的逐块 Collider 残留
+            var colliders = GetComponentsInChildren<Collider>(true);
+            int count = 0;
+            for (int i = 0; i < colliders.Length; i++)
             {
+                var col = colliders[i];
                 if (Application.isPlaying)
                     Destroy(col);
                 else
                     DestroyImmediate(col);
+                count++;
             }
-            Debug.Log($"[ColliderGen] 已清除 {colliders.Length} 个碰撞体");
+            Debug.Log($"[ColliderGen] 已清除(含子层级) {count} 个碰撞体", this);
         }
 
         private void GenerateMeshCollider(float cellSize)
@@ -170,11 +174,7 @@ namespace Project.Core.Authoring
         private void GenerateGreedyMergedBoxes(float cellSize)
         {
             // 贪心算法：尝试合并最大的立方体/长方体
-            HashSet<Vector3Int> remaining = new HashSet<Vector3Int>();
-            foreach (var cell in layout.cells)
-            {
-                remaining.Add(cell.coord);
-            }
+            HashSet<Vector3Int> remaining = new HashSet<Vector3Int>(layout.cells.Select(c => c.coord));
 
             while (remaining.Count > 0)
             {
@@ -222,26 +222,22 @@ namespace Project.Core.Authoring
             Vector3Int bestSize = Vector3Int.one;
             int bestVolume = 1;
 
-            // 尝试不同的扩展顺序
-            for (int maxX = 1; maxX <= 32; maxX++)
+            // 先沿 X 尽量扩，再沿 Y，再沿 Z（线性扫描，稳定且高效）
+            int maxX = 1;
+            while (CanFormBox(start, new Vector3Int(maxX + 1, 1, 1), available)) maxX++;
+            for (int x = maxX; x >= 1; x--)
             {
-                for (int maxY = 1; maxY <= 32; maxY++)
+                int maxY = 1;
+                while (CanFormBox(start, new Vector3Int(x, maxY + 1, 1), available)) maxY++;
+                for (int y = maxY; y >= 1; y--)
                 {
-                    for (int maxZ = 1; maxZ <= 32; maxZ++)
+                    int maxZ = 1;
+                    while (CanFormBox(start, new Vector3Int(x, y, maxZ + 1), available)) maxZ++;
+                    int volume = x * y * maxZ;
+                    if (volume > bestVolume)
                     {
-                        if (CanFormBox(start, new Vector3Int(maxX, maxY, maxZ), available))
-                        {
-                            int volume = maxX * maxY * maxZ;
-                            if (volume > bestVolume)
-                            {
-                                bestVolume = volume;
-                                bestSize = new Vector3Int(maxX, maxY, maxZ);
-                            }
-                        }
-                        else
-                        {
-                            break; // Z 方向无法扩展，退出
-                        }
+                        bestVolume = volume;
+                        bestSize = new Vector3Int(x, y, maxZ);
                     }
                 }
             }
