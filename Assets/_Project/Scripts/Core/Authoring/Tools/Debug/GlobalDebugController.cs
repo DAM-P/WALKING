@@ -70,12 +70,7 @@ namespace Project.Core.Authoring
             // 可选测试工具：存在则会被禁用（若无此类型则忽略）
 
             // 关闭 ExtendInputManager 的调试日志
-            var extendInputManager = FindObjectOfType<ExtendInputManager>();
-            if (extendInputManager != null)
-            {
-                extendInputManager.showDebugLog = false;
-            }
-
+       
             // 关闭 CrosshairExtendManager 的调试
             var crosshairManager = FindObjectOfType<CrosshairExtendManager>();
             if (crosshairManager != null)
