@@ -23,9 +23,6 @@ namespace Project.Core.Authoring
         [Tooltip("选择管理器")]
         public CubeSelectionManager selectionManager;
         
-        [Tooltip("键盘拉伸输入管理器（旧系统，可选）")]
-        public ExtendInputManager extendInputManager;
-        
         [Tooltip("准星渐进拉伸管理器（新方案，推荐）")]
         public CrosshairExtendManager crosshairExtendManager;
         
@@ -76,8 +73,6 @@ namespace Project.Core.Authoring
             // 自动查找组件
             if (selectionManager == null)
                 selectionManager = FindObjectOfType<CubeSelectionManager>();
-            if (extendInputManager == null)
-                extendInputManager = FindObjectOfType<ExtendInputManager>();
             if (crosshairExtendManager == null)
                 crosshairExtendManager = FindObjectOfType<CrosshairExtendManager>();
             if (playerController == null)
@@ -89,26 +84,14 @@ namespace Project.Core.Authoring
                 playerController.lockCursor = false; // 由协调器接管
             }
 
-            // 检测使用哪种拉伸系统（优先：准星模式）
+            // 选择拉伸系统（仅保留准星方案）
             if (crosshairExtendManager != null && crosshairExtendManager.enabled)
             {
                 _activeInputType = ExtendInputType.MouseDrag; // 复用“鼠标系”类型
                 if (showDebugLog)
                     Debug.Log("[InputCoordinator] 使用准星渐进拉伸系统");
-
-                // 禁用其它输入避免冲突
-                if (extendInputManager != null && extendInputManager.enabled)
-                {
-                    extendInputManager.enabled = false;
-                    if (showDebugLog) Debug.Log("[InputCoordinator] 已禁用 ExtendInputManager（避免冲突）");
-                }
             }
-            else if (extendInputManager != null && extendInputManager.enabled)
-            {
-                _activeInputType = ExtendInputType.Keyboard;
-                if (showDebugLog)
-                    Debug.Log("[InputCoordinator] 使用键盘拉伸系统");
-            }
+            else { _activeInputType = ExtendInputType.None; }
 
             // 初始化为移动模式
             SwitchToMoveMode();
@@ -175,9 +158,7 @@ namespace Project.Core.Authoring
             _currentMode = InputMode.ExtendMode;
 
             // 根据输入类型和跑酷模式决定是否禁用移动
-            bool shouldDisableMovement = !parkourMode || 
-                                        (_activeInputType == ExtendInputType.Keyboard) ||
-                                        !allowMovementWhileExtending;
+            bool shouldDisableMovement = !parkourMode || !allowMovementWhileExtending;
 
             if (playerController != null)
             {

@@ -174,17 +174,7 @@ namespace Project.Core.Authoring
                 Debug.Log($"  - Interactable Layer: {selectionManager.interactableLayer.value}");
             }
 
-            // 2. 检查 ExtendInputManager
-            var extendManager = FindObjectOfType<ExtendInputManager>();
-            if (extendManager == null)
-            {
-                Debug.LogWarning("[验证] ⚠️ 未找到 ExtendInputManager");
-            }
-            else
-            {
-                Debug.Log($"[验证] ✅ ExtendInputManager 存在");
-                Debug.Log($"  - Enabled: {extendManager.enabled}");
-            }
+            // 2.（已弃用）键盘拉伸系统 ExtendInputManager 已移除
 
             // 3. 检查 Proxy
             var proxies = FindObjectsOfType<InteractableProxy>(includeInactive: true);
