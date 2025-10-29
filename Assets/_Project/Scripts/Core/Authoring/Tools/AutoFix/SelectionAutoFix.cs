@@ -25,6 +25,11 @@ namespace Project.Core.Authoring
         [Tooltip("目标 Layer 名称")]
         public string targetLayerName = "Default";
 
+        // 日志节流
+        private int _lastInactiveCount = -1;
+        private float _lastLogTime = 0f;
+        private const float LogIntervalSeconds = 5f;
+
         private void Update()
         {
             // 只在 Play 模式下运行
@@ -105,18 +110,25 @@ namespace Project.Core.Authoring
 
             foreach (var proxy in proxies)
             {
-                if (!proxy.gameObject.activeInHierarchy)
+                // 忽略运行时用于克隆的隐藏预制（无实体关联，且一般名为 InteractableProxyPrefab）
+                bool isTemplate = proxy.linkedEntity == Entity.Null || proxy.name.Contains("InteractableProxyPrefab");
+                if (!proxy.gameObject.activeInHierarchy && !isTemplate)
                 {
                     inactiveCount++;
-                    // 自动激活（可选）
+                    // 可选：自动激活
                     // proxy.gameObject.SetActive(true);
-                    // Debug.Log($"[AutoFix] ✅ 激活 {proxy.name}");
                 }
             }
 
+            // 仅当数量变化或超过节流间隔时输出一次，避免刷屏
             if (inactiveCount > 0)
             {
-                Debug.LogWarning($"[AutoFix] ⚠️ 发现 {inactiveCount} 个未激活的 Proxy！");
+                if (inactiveCount != _lastInactiveCount || Time.time - _lastLogTime > LogIntervalSeconds)
+                {
+                    Debug.LogWarning($"[AutoFix] ⚠️ 发现 {inactiveCount} 个未激活的 Proxy！（已忽略隐藏模板）");
+                    _lastInactiveCount = inactiveCount;
+                    _lastLogTime = Time.time;
+                }
             }
         }
 
