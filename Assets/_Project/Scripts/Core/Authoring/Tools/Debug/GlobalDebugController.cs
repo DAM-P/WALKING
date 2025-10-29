@@ -63,11 +63,9 @@ namespace Project.Core.Authoring
             showStageDebug = false;
 
             // 查找并禁用所有调试组件
-            DisableComponent<SelectionDebugTool>();
             DisableComponent<SelectionTester>();
             DisableComponent<SelectionAutoFix>();
             DisableComponent<RaycastDebugger>();
-            DisableComponent<InputModeDebugTool>();
             DisableComponent<InputModeCoordinator>();
             // 可选测试工具：存在则会被禁用（若无此类型则忽略）
 
