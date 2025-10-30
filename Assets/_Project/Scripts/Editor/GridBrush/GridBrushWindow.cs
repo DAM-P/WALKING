@@ -10,6 +10,13 @@ namespace Project.Editor.GridBrush
 {
     public class GridBrushWindow : EditorWindow
     {
+        private enum EditPlane
+        {
+            XZ, // Horizontal (height on Y)
+            XY, // Vertical facing Z (height on Z)
+            YZ  // Vertical facing X (height on X)
+        }
+
         private CubeLayout _layout;
         private float _cellSize = 1f;
         private int _brushSize = 1;
@@ -26,6 +33,17 @@ namespace Project.Editor.GridBrush
 		private const string ColorHistoryPrefsKey = "Project.GridBrush.ColorHistory";
 		private const int MaxColorHistory = 16;
 		private readonly List<Color> _colorHistory = new List<Color>();
+
+        // Plane editing options
+        private EditPlane _editPlane = EditPlane.XZ;
+        private int _planeHeight = 0; // grid units along the plane's orthogonal axis
+
+        // Rectangle painting options
+        private bool _rectangleMode = false; // 长方形绘制
+        private bool _rectangleHollow = false; // 仅边框
+        private bool _isRectSelecting = false;
+        private Vector3Int _rectStart;
+        private bool _rectErase = false;
 
         private readonly HashSet<Vector3Int> _previewCells = new HashSet<Vector3Int>();
 		private bool _hasHover;
@@ -78,6 +96,21 @@ namespace Project.Editor.GridBrush
 			}
 			DrawColorHistoryGUI();
             _erase = EditorGUILayout.Toggle("Erase Mode", _erase);
+            // Plane selection and height
+            _editPlane = (EditPlane)EditorGUILayout.EnumPopup("Edit Plane", _editPlane);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                string axis = _editPlane == EditPlane.XZ ? "Y" : (_editPlane == EditPlane.XY ? "Z" : "X");
+                _planeHeight = EditorGUILayout.IntField($"{axis} (Plane Height)", _planeHeight);
+                if (GUILayout.Button("-", GUILayout.Width(24))) _planeHeight--;
+                if (GUILayout.Button("+", GUILayout.Width(24))) _planeHeight++;
+            }
+            // Rectangle controls
+            _rectangleMode = EditorGUILayout.ToggleLeft("Rectangle Mode (drag to size)", _rectangleMode);
+            if (_rectangleMode)
+            {
+                _rectangleHollow = EditorGUILayout.ToggleLeft("Hollow Rectangle", _rectangleHollow);
+            }
             _paintVerticalLine = EditorGUILayout.ToggleLeft("Paint Vertical Line (Y axis)", _paintVerticalLine);
             if (_paintVerticalLine)
             {
@@ -186,7 +219,16 @@ namespace Project.Editor.GridBrush
             if (e.alt) return;
 
             if (!hasHit) return;
-            UpdatePreview(snapped);
+
+            // Update preview (rectangle or normal)
+            if (_rectangleMode && _isRectSelecting)
+            {
+                UpdatePreviewRectangle(_rectStart, snapped);
+            }
+            else
+            {
+                UpdatePreview(snapped);
+            }
             DrawPreviewGizmos();
             SceneView.RepaintAll();
 
@@ -199,38 +241,77 @@ namespace Project.Editor.GridBrush
                     if (e.button == 0 || e.button == 1)
                     {
                         GUIUtility.hotControl = controlId;
-                        if (e.button == 1 || isErase)
+                        if (_rectangleMode)
                         {
-                            EraseCells(_previewCells);
+                            // Start rectangle selection
+                            _isRectSelecting = true;
+                            _rectStart = snapped;
+                            _rectErase = (e.button == 1 || isErase);
+                            e.Use();
                         }
                         else
                         {
-                            PaintCells(_previewCells, snapDown);
+                            if (e.button == 1 || isErase)
+                            {
+                                EraseCells(_previewCells);
+                            }
+                            else
+                            {
+                                PaintCells(_previewCells, snapDown);
+                            }
+                            e.Use();
                         }
-                        e.Use();
                     }
                     break;
 
                 case EventType.MouseDrag:
                     if (GUIUtility.hotControl == controlId && (e.button == 0 || e.button == 1))
                     {
-                        if (e.button == 1 || isErase)
+                        if (_rectangleMode)
                         {
-                            EraseCells(_previewCells);
+                            UpdatePreviewRectangle(_rectStart, snapped);
+                            e.Use();
                         }
                         else
                         {
-                            PaintCells(_previewCells, snapDown);
+                            if (e.button == 1 || isErase)
+                            {
+                                EraseCells(_previewCells);
+                            }
+                            else
+                            {
+                                PaintCells(_previewCells, snapDown);
+                            }
+                            e.Use();
                         }
-                        e.Use();
                     }
                     break;
 
                 case EventType.MouseUp:
                     if (GUIUtility.hotControl == controlId && (e.button == 0 || e.button == 1))
                     {
-                        GUIUtility.hotControl = 0;
-                        e.Use();
+                        if (_rectangleMode && _isRectSelecting)
+                        {
+                            // Apply rectangle paint/erase
+                            var rectCells = GetRectangleCells(_rectStart, snapped);
+                            if (_rectErase)
+                            {
+                                EraseCells(rectCells);
+                            }
+                            else
+                            {
+                                PaintCells(rectCells, snapDown);
+                            }
+                            _isRectSelecting = false;
+                            _previewCells.Clear();
+                            GUIUtility.hotControl = 0;
+                            e.Use();
+                        }
+                        else
+                        {
+                            GUIUtility.hotControl = 0;
+                            e.Use();
+                        }
                     }
                     break;
                 case EventType.KeyUp:
@@ -238,6 +319,28 @@ namespace Project.Editor.GridBrush
                     {
                         GUIUtility.hotControl = 0;
                         e.Use();
+                    }
+                    break;
+                case EventType.KeyDown:
+                    // Plane height hotkeys: [ / ] and , / .
+                    if (e.keyCode == KeyCode.LeftBracket || e.keyCode == KeyCode.Comma)
+                    {
+                        _planeHeight--;
+                        e.Use();
+                        Repaint();
+                    }
+                    else if (e.keyCode == KeyCode.RightBracket || e.keyCode == KeyCode.Period)
+                    {
+                        _planeHeight++;
+                        e.Use();
+                        Repaint();
+                    }
+                    // Cycle plane with Tab
+                    else if (e.keyCode == KeyCode.Tab)
+                    {
+                        _editPlane = (EditPlane)(((int)_editPlane + 1) % 3);
+                        e.Use();
+                        Repaint();
                     }
                     break;
             }
@@ -269,12 +372,35 @@ namespace Project.Editor.GridBrush
             Handles.zTest = prevZ;
         }
 
-        private static bool TryGetPlaneHit(Ray ray, out Vector3 hit)
+        private bool TryGetPlaneHit(Ray ray, out Vector3 hit)
         {
-            // 以 y=0 的水平面作为默认绘制平面
-            Plane plane = new Plane(Vector3.up, Vector3.zero);
-            float enter;
-            if (plane.Raycast(ray, out enter))
+            if (_layout == null)
+            {
+                hit = Vector3.zero;
+                return false;
+            }
+
+            float size = _layout.cellSize > 0 ? _layout.cellSize : _cellSize;
+            Vector3 planePoint = _layout.origin;
+            Vector3 normal;
+            switch (_editPlane)
+            {
+                case EditPlane.XY:
+                    normal = Vector3.forward;
+                    planePoint += Vector3.forward * (_planeHeight * size);
+                    break;
+                case EditPlane.YZ:
+                    normal = Vector3.right;
+                    planePoint += Vector3.right * (_planeHeight * size);
+                    break;
+                default: // XZ
+                    normal = Vector3.up;
+                    planePoint += Vector3.up * (_planeHeight * size);
+                    break;
+            }
+
+            Plane plane = new Plane(normal, planePoint);
+            if (plane.Raycast(ray, out float enter))
             {
                 hit = ray.GetPoint(enter);
                 return true;
@@ -308,6 +434,68 @@ namespace Project.Editor.GridBrush
                 for (int z = -r; z <= r; z++)
                 {
                     _previewCells.Add(center + new Vector3Int(x, y, z));
+                }
+            }
+        }
+
+        private void UpdatePreviewRectangle(Vector3Int a, Vector3Int b)
+        {
+            _previewCells.Clear();
+            foreach (var c in GetRectangleCells(a, b))
+            {
+                _previewCells.Add(c);
+            }
+        }
+
+        private IEnumerable<Vector3Int> GetRectangleCells(Vector3Int a, Vector3Int b)
+        {
+            // Based on edit plane, sweep inclusive ranges across two axes; keep orthogonal axis fixed
+            switch (_editPlane)
+            {
+                case EditPlane.XY:
+                {
+                    int minX = Mathf.Min(a.x, b.x);
+                    int maxX = Mathf.Max(a.x, b.x);
+                    int minY = Mathf.Min(a.y, b.y);
+                    int maxY = Mathf.Max(a.y, b.y);
+                    int z = a.z; // on the same Z plane
+                    for (int x = minX; x <= maxX; x++)
+                    for (int y = minY; y <= maxY; y++)
+                    {
+                        if (_rectangleHollow && x > minX && x < maxX && y > minY && y < maxY) continue;
+                        yield return new Vector3Int(x, y, z);
+                    }
+                    break;
+                }
+                case EditPlane.YZ:
+                {
+                    int minY = Mathf.Min(a.y, b.y);
+                    int maxY = Mathf.Max(a.y, b.y);
+                    int minZ = Mathf.Min(a.z, b.z);
+                    int maxZ = Mathf.Max(a.z, b.z);
+                    int x = a.x; // on the same X plane
+                    for (int y = minY; y <= maxY; y++)
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        if (_rectangleHollow && y > minY && y < maxY && z > minZ && z < maxZ) continue;
+                        yield return new Vector3Int(x, y, z);
+                    }
+                    break;
+                }
+                default: // XZ
+                {
+                    int minX = Mathf.Min(a.x, b.x);
+                    int maxX = Mathf.Max(a.x, b.x);
+                    int minZ = Mathf.Min(a.z, b.z);
+                    int maxZ = Mathf.Max(a.z, b.z);
+                    int y = a.y; // on the same Y plane
+                    for (int x = minX; x <= maxX; x++)
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        if (_rectangleHollow && x > minX && x < maxX && z > minZ && z < maxZ) continue;
+                        yield return new Vector3Int(x, y, z);
+                    }
+                    break;
                 }
             }
         }

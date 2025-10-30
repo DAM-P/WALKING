@@ -132,7 +132,6 @@ GameObject:
   m_Component:
   - component: {fileID: 22124011}
   - component: {fileID: 22124012}
-  - component: {fileID: 22124009}
   m_Layer: 0
   m_Name: ExtendSettings
   m_TagString: Untagged
@@ -140,24 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &22124009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 22124008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31f92f7ff8e81e646a6dd9c8d9ac28ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  holdThreshold: 0.1
-  extendInterval: 0.2
-  maxExtendLength: 10
-  playerController: {fileID: 0}
-  autoDisableMovement: 1
-  showDebugLog: 1
 --- !u!4 &22124011
 Transform:
   m_ObjectHideFlags: 0

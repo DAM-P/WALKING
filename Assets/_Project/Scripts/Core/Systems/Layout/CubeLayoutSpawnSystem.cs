@@ -50,6 +50,9 @@ namespace Project.Core.Systems
                     
                     // 添加 Cube 类型标记（静态地形）
                     ecb.AddComponent(e, new CubeTypeTag { Type = CubeType.Static });
+
+                    // 写入布局 TypeId 到实体（用于玩法判定）
+                    ecb.AddComponent(e, new CubeVariantId { Value = cell.TypeId });
                     
                     // 标记可交互方块（根据规则）
                     bool isInteractable = ShouldBeInteractable(cell);

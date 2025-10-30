@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageName: Stage 1
   description: 
-  layout: {fileID: 11400000, guid: ba44e4e1f3f965e4886fd60cae461fb0, type: 2}
+  layout: {fileID: 11400000, guid: 7a177ba4f469fe842a443ea46f0f1021, type: 2}
   cubePrefab: {fileID: 3586884651521338107, guid: f1235321c56c2424d92a6a4651dcd1f8, type: 3}
   spawnPerFrame: 2048
   applyInstanceColor: 1
