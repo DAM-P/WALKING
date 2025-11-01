@@ -7,6 +7,7 @@ namespace Project.Core.Authoring.Debugging
 		public enum Channel
 		{
 			ExtendPreview,
+			Mantle,
 			Crosshair,
 			Selection,
 			Raycast,
@@ -15,11 +16,14 @@ namespace Project.Core.Authoring.Debugging
 
 		// 默认：仅允许 ExtendPreview 在 Game 视图渲染
 		public static bool onlyExtendPreview = true;
+		public static bool showMantle = false;
 
 		static bool IsAllowed(Channel channel)
 		{
 			if (!onlyExtendPreview) return true;
-			return channel == Channel.ExtendPreview;
+			if (channel == Channel.ExtendPreview) return true;
+			if (channel == Channel.Mantle && showMantle) return true;
+			return false;
 		}
 
 		public static void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0f, bool depthTest = true, Channel channel = Channel.General)
@@ -35,6 +39,7 @@ namespace Project.Core.Authoring.Debugging
 		}
 	}
 }
+
 
 
 

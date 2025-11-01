@@ -38,8 +38,8 @@ namespace Project.Core.Systems
                     float3 pos = spawner.ValueRO.Origin + (float3)cell.Coord * spawner.ValueRO.CellSize;
                     ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(pos, quaternion.identity, 1f));
                     
-                    // 添加关卡标记，便于统一清理
-                    ecb.AddComponent(e, new StageCubeTag { StageIndex = 0 });
+                    // 添加关卡标记（使用 Spawner 的 StageIndex）
+                    ecb.AddComponent(e, new StageCubeTag { StageIndex = spawner.ValueRO.StageIndex });
                     
                     // 添加网格坐标（用于空间哈希表）
                     ecb.AddComponent(e, new CubeGridPosition 

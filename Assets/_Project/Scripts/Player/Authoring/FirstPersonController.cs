@@ -1,4 +1,5 @@
 using UnityEngine;
+using Project.Core.Authoring.Debugging;
 
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
@@ -36,6 +37,18 @@ public class FirstPersonController : MonoBehaviour
 	[Tooltip("认为是墙的法线 y 分量上限（<=该值为垂直壁面）")] public float wallMaxUpDot = 0.2f;
 	[Tooltip("墙面接触的记忆（Coyote）时间（秒）")] public float wallCoyoteTime = 0.15f;
 	[Tooltip("墙跳产生的额外水平速度衰减率（每秒减少量）")] public float externalPlanarDecay = 8f;
+
+	[Header("Mantle (Ledge Climb)")]
+	[Tooltip("是否启用扒墙/翻越功能")] public bool enableMantle = true;
+	[Tooltip("可翻越的最大高度（米）")] public float mantleMaxHeight = 1.4f;
+	[Tooltip("可翻越的最小高度（米）")] public float mantleMinHeight = 0.3f;
+	[Tooltip("沿法线前探距离以确定落点（米）")] public float mantleForwardOffset = 0.35f;
+	[Tooltip("翻越移动时长（秒）")] public float mantleDuration = 0.25f;
+	[Tooltip("翻越检测的球半径（米）")] public float mantleCheckRadius = 0.2f;
+	[Tooltip("用于找落点的地面层")] public LayerMask mantleGroundLayers = ~0;
+	[Tooltip("前向探测墙的距离（米）")] public float mantleProbeDistance = 0.75f;
+	[Tooltip("需要面向墙的最小阈值（点积）")] [Range(0f,1f)] public float mantleFacingDotMin = 0.3f;
+	[Tooltip("翻越冷却时间（秒），避免连续触发")] public float mantleCooldown = 0.25f;
 
 	[Header("Mouse Look")]
 	public float lookSensitivity = 2f;
@@ -82,6 +95,13 @@ public class FirstPersonController : MonoBehaviour
 	float lastWallContactTime;
 	Vector3 externalPlanarVelocity;
 	float airControlLockedUntil;
+
+	// Mantle state
+	bool isMantling;
+	float mantleStartTime;
+	Vector3 mantleStartPos;
+	Vector3 mantleTargetPos;
+	float lastMantleTime;
 
 	void Awake()
 	{
@@ -150,6 +170,23 @@ public class FirstPersonController : MonoBehaviour
 		if (isGrounded && verticalVelocity < 0f)
 		{
 			verticalVelocity = groundedStickVelocity; // 小负值保证贴地
+		}
+
+		// Mantle update has highest priority
+		if (isMantling)
+		{
+			UpdateMantle();
+			return;
+		}
+
+		// Try start mantle when airborne（上升或轻微下落都允许）
+		if (!isGrounded && enableMantle && verticalVelocity > -0.5f)
+		{
+			if (TryStartMantle())
+			{
+				UpdateMantle();
+				return;
+			}
 		}
 
 		// 墙面检测（空中且启用墙跳时）
@@ -392,6 +429,79 @@ public class FirstPersonController : MonoBehaviour
 	{
 		Cursor.lockState = shouldLock ? CursorLockMode.Locked : CursorLockMode.None;
 		Cursor.visible = !shouldLock;
+	}
+
+	bool TryStartMantle()
+	{
+		if (controller == null) return false;
+		if (Time.time - lastMantleTime < mantleCooldown) return false;
+		// 1) 前向探测墙面
+		Vector2 mv = ReadMoveInput();
+		Vector3 fwd = ComputePlanarMove(mv);
+		if (fwd.sqrMagnitude < 1e-6f) fwd = transform.forward;
+		fwd.Normalize();
+		Vector3 chest = controller.bounds.center + Vector3.up * (controller.height * 0.25f);
+		float probeRadius = Mathf.Max(0.05f, controller.radius * 0.9f);
+		if (!Physics.SphereCast(chest, probeRadius, fwd, out var wallHit, mantleProbeDistance, wallLayers, QueryTriggerInteraction.Ignore))
+			return false;
+		if (wallHit.normal.y > wallMaxUpDot) return false; // 需要接近垂直的表面
+		float facing = Vector3.Dot(transform.forward, -wallHit.normal);
+		if (facing < mantleFacingDotMin) return false;
+		DebugDraw.DrawLine(chest, wallHit.point, Color.cyan, 0.1f, true, DebugDraw.Channel.Mantle);
+		DebugDraw.DrawLine(wallHit.point, wallHit.point + wallHit.normal * 0.4f, Color.blue, 0.1f, true, DebugDraw.Channel.Mantle);
+
+		// 2) 从墙面上方向下找台面
+		Vector3 topCastOrigin = wallHit.point + Vector3.up * mantleMaxHeight + wallHit.normal * 0.06f;
+		float maxDown = mantleMaxHeight + 0.6f;
+		if (!Physics.SphereCast(topCastOrigin, probeRadius, Vector3.down, out var topHit, maxDown, mantleGroundLayers, QueryTriggerInteraction.Ignore))
+			return false;
+		// 以脚底高度计算台面高度窗口
+		float feetY = transform.position.y + controller.center.y - (controller.height * 0.5f - controller.radius);
+		float ledgeHeight = topHit.point.y - feetY;
+		if (ledgeHeight < mantleMinHeight || ledgeHeight > mantleMaxHeight) return false;
+		DebugDraw.DrawLine(topCastOrigin, topHit.point, Color.green, 0.1f, true, DebugDraw.Channel.Mantle);
+
+		// 3) 目标落点与体积检测
+		Vector3 targetFlat = topHit.point + wallHit.normal * mantleForwardOffset;
+		Vector3 target = new Vector3(targetFlat.x, topHit.point.y + 0.02f, targetFlat.z);
+		float r = controller.radius * 0.98f;
+		float half = Mathf.Max(0.1f, controller.height * 0.5f - r);
+		Vector3 bottom = target + controller.center + Vector3.up * (-half);
+		Vector3 top = target + controller.center + Vector3.up * (half);
+		if (Physics.CheckCapsule(bottom, top, r, ~0, QueryTriggerInteraction.Ignore))
+			return false;
+		DebugDraw.DrawLine(topHit.point, target, Color.yellow, 0.2f, true, DebugDraw.Channel.Mantle);
+
+		// OK，开始翻越
+		isMantling = true;
+		mantleStartTime = Time.time;
+		mantleStartPos = transform.position;
+		mantleTargetPos = target;
+		lastMantleTime = Time.time;
+		// 清空速度
+		externalPlanarVelocity = Vector3.zero;
+		verticalVelocity = 0f;
+		#if UNITY_EDITOR
+		if (DebugDraw.showMantle) Debug.Log($"[Mantle] start -> target={mantleTargetPos}");
+		#endif
+		return true;
+	}
+
+	void UpdateMantle()
+	{
+		float t = Mathf.Clamp01((Time.time - mantleStartTime) / Mathf.Max(0.01f, mantleDuration));
+		// 使用平滑插值并加入微小抛物线保证越过边缘
+		float smooth = t * t * (3f - 2f * t);
+		Vector3 pos = Vector3.Lerp(mantleStartPos, mantleTargetPos, smooth);
+		pos.y += Mathf.Sin(t * Mathf.PI) * 0.06f; // 约 6cm 的抬升
+		Vector3 delta = pos - transform.position;
+		controller.Move(delta);
+		if (t >= 1f - 1e-3f)
+		{
+			isMantling = false;
+			verticalVelocity = 0f;
+			lastMantleTime = Time.time;
+		}
 	}
 }
 

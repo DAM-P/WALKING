@@ -60,11 +60,7 @@ namespace Project.Core.Authoring
             _em.SetComponentData(_singleton, data);
 
 #if UNITY_EDITOR
-            if (!cell.Equals(_lastLogged))
-            {
-                _lastLogged = cell;
-                Debug.Log($"[PlayerFootTracker] CurrentCell={cell}");
-            }
+            // Debug disabled per request
 #endif
         }
     }

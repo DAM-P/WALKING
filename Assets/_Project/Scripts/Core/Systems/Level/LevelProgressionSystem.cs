@@ -42,7 +42,8 @@ namespace Project.Core.Systems
 					SpawnedCount = 0,
 					ApplyInstanceColor = entry.ApplyInstanceColor,
 					EmissionIntensity = entry.EmissionIntensity,
-					RemoveOnComplete = entry.RemoveOnComplete
+					RemoveOnComplete = entry.RemoveOnComplete,
+					StageIndex = idx
 				});
 				var buffer = ecb.AddBuffer<CubeCell>(holder);
 					ref var cells = ref layout.Value.cells;
@@ -57,7 +58,24 @@ namespace Project.Core.Systems
 					});
 				}
 
-				// 标记已启动
+					// 写入 StepTrigger 目标计数
+					int totalToTrigger = 0;
+					if (state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<StepTriggerColor>()).CalculateEntityCount() > 0)
+					{
+						var cfg = state.EntityManager.GetBuffer<StepTriggerColor>(SystemAPI.GetSingletonEntity<StepTriggerColor>());
+						for (int i = 0; i < cells.Length; i++)
+						{
+							int typeId = cells[i].typeId;
+							for (int k = 0; k < cfg.Length; k++)
+							{
+								if (cfg[k].TypeId == typeId) { totalToTrigger++; break; }
+							}
+						}
+					}
+					var progEntity = state.EntityManager.CreateEntity(typeof(StageStepProgress));
+					state.EntityManager.SetComponentData(progEntity, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
+
+					// 标记已启动
 				seq.ValueRW.Started = 1;
 					Debug.Log($"[LevelProgression] 初始关加载完成 index={idx}, cells={cells.Length}");
 
@@ -107,10 +125,38 @@ namespace Project.Core.Systems
 						SpawnedCount = 0,
 						ApplyInstanceColor = entry.ApplyInstanceColor,
 						EmissionIntensity = entry.EmissionIntensity,
-						RemoveOnComplete = entry.RemoveOnComplete
+						RemoveOnComplete = entry.RemoveOnComplete,
+						StageIndex = idx
 					});
-					var buffer = ecb.AddBuffer<CubeCell>(holder);
 					ref var cells = ref layout.Value.cells;
+					// 写入 StepTrigger 目标计数
+					int totalToTrigger = 0;
+					if (state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<StepTriggerColor>()).CalculateEntityCount() > 0)
+					{
+						var cfg = state.EntityManager.GetBuffer<StepTriggerColor>(SystemAPI.GetSingletonEntity<StepTriggerColor>());
+						for (int i = 0; i < cells.Length; i++)
+						{
+							int typeId = cells[i].typeId;
+							for (int k = 0; k < cfg.Length; k++)
+							{
+								if (cfg[k].TypeId == typeId) { totalToTrigger++; break; }
+							}
+						}
+					}
+					// 重置/更新进度单例
+					var qProg = state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<StageStepProgress>());
+					if (!qProg.IsEmpty)
+					{
+						var ent = qProg.GetSingletonEntity();
+						state.EntityManager.SetComponentData(ent, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
+					}
+					else
+					{
+						var ent = state.EntityManager.CreateEntity(typeof(StageStepProgress));
+						state.EntityManager.SetComponentData(ent, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
+					}
+
+					var buffer = ecb.AddBuffer<CubeCell>(holder);
 					for (int i = 0; i < cells.Length; i++)
 					{
 						var c = cells[i];

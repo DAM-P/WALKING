@@ -64,7 +64,7 @@ namespace Project.Core.Systems
                 bool shouldTrigger = hasConfig && !state.EntityManager.HasComponent<StepTriggeredOnce>(cube);
 
 #if UNITY_EDITOR
-                Debug.Log($"[StepDetection] cell {last} -> {current}, found cube={cube.Index}:{cube.Version}, variant={variant}, hasConfig={hasConfig}, alreadyTriggered={state.EntityManager.HasComponent<StepTriggeredOnce>(cube)}");
+                // Debug disabled per request
 #endif
 
                 if (shouldTrigger)
@@ -104,14 +104,37 @@ namespace Project.Core.Systems
                     ecb.AddComponent(evtEntity, new StepAudioEvent { Position = pos, TypeId = variant });
 
 #if UNITY_EDITOR
-                    Debug.Log($"[StepDetection] TRIGGERED at {current}");
+                    // Debug disabled per request
 #endif
+
+                    // 统计当前关卡进度（仅统计当前 StageIndex 的方块）
+                    if (state.EntityManager.HasComponent<StageCubeTag>(cube))
+                    {
+                        var tag = state.EntityManager.GetComponentData<StageCubeTag>(cube);
+                        var qProg = state.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<StageStepProgress>());
+                        if (!qProg.IsEmpty)
+                        {
+                            var progEnt = qProg.GetSingletonEntity();
+                            var prog = state.EntityManager.GetComponentData<StageStepProgress>(progEnt);
+                            if (prog.StageIndex == tag.StageIndex)
+                            {
+                                prog.Triggered++;
+                                state.EntityManager.SetComponentData(progEnt, prog);
+                                // 完成则请求下一关
+                                if (prog.TotalToTrigger > 0 && prog.Triggered >= prog.TotalToTrigger)
+                                {
+                                    var req = ecb.CreateEntity();
+                                    ecb.AddComponent<NextLevelRequest>(req);
+                                }
+                            }
+                        }
+                    }
                 }
             }
 #if UNITY_EDITOR
             else
             {
-                Debug.Log($"[StepDetection] cell {last} -> {current}, no cube or map not ready (IsInitialized={map.IsInitialized}, IsCreated={map.Map.IsCreated})");
+                // Debug disabled per request
             }
 #endif
 

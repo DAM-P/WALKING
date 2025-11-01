@@ -37,6 +37,7 @@ namespace Project.Core.Authoring
         public int ApplyInstanceColor; // bool as int
         public float EmissionIntensity;
         public int RemoveOnComplete; // bool as int
+        public int StageIndex; // 所属关卡索引
     }
 
     public struct CubeCell : IBufferElementData
@@ -73,7 +74,8 @@ namespace Project.Core.Authoring
                 SpawnedCount = 0,
                 ApplyInstanceColor = authoring.applyInstanceColor ? 1 : 0,
                 EmissionIntensity = authoring.emissionIntensity,
-                RemoveOnComplete = authoring.removeOnComplete ? 1 : 0
+                RemoveOnComplete = authoring.removeOnComplete ? 1 : 0,
+                StageIndex = 0
             });
 
             var buffer = AddBuffer<CubeCell>(holder);

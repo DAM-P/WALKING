@@ -1870,6 +1870,18 @@ MonoBehaviour:
   wallMaxUpDot: 0.2
   wallCoyoteTime: 0.15
   externalPlanarDecay: 8
+  enableMantle: 1
+  mantleMaxHeight: 1
+  mantleMinHeight: 0.3
+  mantleForwardOffset: 0.35
+  mantleDuration: 0.25
+  mantleCheckRadius: 0.1
+  mantleGroundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  mantleProbeDistance: 0.25
+  mantleFacingDotMin: 0.3
+  mantleCooldown: 0.25
   lookSensitivity: 2
   holdRightMouseToLook: 0
   lockCursor: 1
@@ -2008,7 +2020,7 @@ MonoBehaviour:
   - typeId: 4
     color: {r: 0, g: 1, b: 0.6129482, a: 0}
     emissionIntensity: 0.65
-    sfx: {fileID: 8300000, guid: 86b50ab0e4357d648a0c316cbecdc241, type: 3}
+    sfx: {fileID: 8300000, guid: 63058987f49b19e40bc6acd5c802ae44, type: 3}
 --- !u!4 &1222694226
 Transform:
   m_ObjectHideFlags: 0

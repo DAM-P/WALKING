@@ -35,6 +35,10 @@ namespace Project.Core.Authoring
 
         [Tooltip("迟滞范围，避免边界抖动（米）")]
         public float colliderDeactivateHysteresis = 3f;
+
+		[Header("生命周期")]
+		[Tooltip("拉伸出的 Cube 在该时间后自动消失（秒）。0 或更小表示不消失")]
+		public float extendedLifetimeSeconds = 5f;
     }
 
     public class ExtendSettingsBaker : Baker<ExtendSettingsAuthoring>
@@ -62,7 +66,8 @@ namespace Project.Core.Authoring
                 ),
                 AutoAddCollider = authoring.autoAddCollider,
                 ColliderActiveRadius = authoring.colliderActiveRadius,
-                ColliderDeactivateHysteresis = authoring.colliderDeactivateHysteresis
+                ColliderDeactivateHysteresis = authoring.colliderDeactivateHysteresis,
+                ExtendedLifetimeSeconds = authoring.extendedLifetimeSeconds
             });
         }
     }

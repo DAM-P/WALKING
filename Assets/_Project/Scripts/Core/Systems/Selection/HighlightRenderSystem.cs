@@ -5,6 +5,7 @@ using Unity.Mathematics;
 #if HAS_URP_MATERIAL_PROPERTY
 using Unity.Rendering;
 #endif
+using Project.Core.Components;
 
 namespace Project.Core.Systems
 {
@@ -39,9 +40,37 @@ namespace Project.Core.Systems
 
 #if HAS_URP_MATERIAL_PROPERTY
             // 写入 URP 材质属性（Emission）
-            foreach (var (highlight, emission) in SystemAPI.Query<RefRO<HighlightState>, RefRW<URPMaterialPropertyEmissionColor>>())
+            foreach (var (highlight, selection, emission, entity) in SystemAPI
+                .Query<RefRO<HighlightState>, RefRO<SelectionState>, RefRW<URPMaterialPropertyEmissionColor>>()
+                .WithEntityAccess())
             {
-                emission.ValueRW.Value = highlight.ValueRO.Color * highlight.ValueRO.Intensity;
+                float4 baseGlow = highlight.ValueRO.Color * highlight.ValueRO.Intensity;
+                float4 finalGlow = baseGlow;
+
+                bool hasExtend = state.EntityManager.HasComponent<ExtendableTag>(entity);
+                bool hoverActive = false;
+                if (state.EntityManager.HasComponent<HoverState>(entity))
+                {
+                    var h = state.EntityManager.GetComponentData<HoverState>(entity);
+                    hoverActive = h.IsHovered != 0;
+                }
+
+                // 未选中但悬停且可拉伸：使用淡蓝提示
+                if (selection.ValueRO.IsSelected == 0 && hoverActive && hasExtend)
+                {
+                    finalGlow = new float4(0.2f, 0.6f, 1.0f, 1.0f) * 0.35f;
+                }
+                // 选中且可拉伸：叠加一层淡蓝，使其与普通选中区分
+                else if (selection.ValueRO.IsSelected == 1 && hasExtend)
+                {
+                    float4 extendGlow = new float4(0.2f, 0.6f, 1.0f, 1.0f); // 淡蓝
+                    float extendStrength = 0.35f; // 叠加强度（小于选中高亮）
+                    finalGlow += extendGlow * extendStrength;
+                }
+
+                // 写回（保持 alpha 为 1）
+                finalGlow.w = 1f;
+                emission.ValueRW.Value = finalGlow;
             }
 #else
             // 未启用 URP 材质属性，仅更新 HighlightState（可通过其他方式读取）

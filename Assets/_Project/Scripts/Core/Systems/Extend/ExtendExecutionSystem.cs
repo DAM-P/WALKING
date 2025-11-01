@@ -100,6 +100,22 @@ namespace Project.Core.Systems
                             ChainID = request.ChainID
                         });
 
+                        // 添加寿命（若启用）
+                        if (settings.ExtendedLifetimeSeconds > 0f)
+                        {
+                            float originalAlpha = 1f;
+#if HAS_URP_MATERIAL_PROPERTY
+                            if (settings.ApplyInstanceColor)
+                            {
+                                // 若我们写入了实例 BaseColor，则以其 alpha 作为初值
+                                // 注意：此时组件尚未真正存在于实体，渲染属性通常在生成后由系统写入
+                                // 因此这里采用 DefaultColor.a 作为初值，足够用于计算渐隐
+                                originalAlpha = settings.DefaultColor.w;
+                            }
+#endif
+                            ecb.AddComponent(newCube, new ExtendedLifetime { RemainingSeconds = settings.ExtendedLifetimeSeconds, TotalSeconds = settings.ExtendedLifetimeSeconds, OriginalAlpha = originalAlpha });
+                        }
+
                         // 添加关卡标记（与静态 Cube 相同的 StageIndex）
                         ecb.AddComponent(newCube, new StageCubeTag { StageIndex = 0 });
 

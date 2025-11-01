@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
+using Project.Core.Components;
 
 #if HAS_URP_MATERIAL_PROPERTY
 using Unity.Rendering;
@@ -37,6 +38,7 @@ namespace Project.Core.Authoring
         [SerializeField] private Entity _currentSelection = Entity.Null;
         [Tooltip("当前悬停的代理")]
         [SerializeField] private InteractableProxy _hoveredProxy;
+        private Entity _lastHoveredEntity = Entity.Null;
 
         [Header("Debug")]
         [Tooltip("显示详细调试日志")]
@@ -169,12 +171,41 @@ namespace Project.Core.Authoring
                 if (proxy != _hoveredProxy)
                 {
                     _hoveredProxy = proxy;
-                    // 可在此添加悬停效果
+                    // 更新 ECS 悬停状态（用于未选中提示发光）
+                    if (_entityManager != null)
+                    {
+                        // 清除上一悬停
+                        if (_lastHoveredEntity != Entity.Null && _entityManager.Exists(_lastHoveredEntity))
+                        {
+                            if (_entityManager.HasComponent<HoverState>(_lastHoveredEntity))
+                                _entityManager.SetComponentData(_lastHoveredEntity, new HoverState { IsHovered = 0 });
+                        }
+
+                        // 设置当前悬停
+                        if (proxy != null && proxy.linkedEntity != Entity.Null && _entityManager.Exists(proxy.linkedEntity))
+                        {
+                            if (!_entityManager.HasComponent<HoverState>(proxy.linkedEntity))
+                                _entityManager.AddComponentData(proxy.linkedEntity, new HoverState { IsHovered = 0 });
+                            _entityManager.SetComponentData(proxy.linkedEntity, new HoverState { IsHovered = 1 });
+                            _lastHoveredEntity = proxy.linkedEntity;
+                        }
+                        else
+                        {
+                            _lastHoveredEntity = Entity.Null;
+                        }
+                    }
                 }
             }
             else
             {
                 _hoveredProxy = null;
+                // 清除上一悬停
+                if (_entityManager != null && _lastHoveredEntity != Entity.Null && _entityManager.Exists(_lastHoveredEntity))
+                {
+                    if (_entityManager.HasComponent<HoverState>(_lastHoveredEntity))
+                        _entityManager.SetComponentData(_lastHoveredEntity, new HoverState { IsHovered = 0 });
+                }
+                _lastHoveredEntity = Entity.Null;
             }
         }
 

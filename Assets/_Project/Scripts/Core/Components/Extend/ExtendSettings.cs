@@ -43,6 +43,11 @@ namespace Project.Core.Components
         /// 迟滞范围，避免边界来回抖动（米）
         /// </summary>
         public float ColliderDeactivateHysteresis;
+
+		/// <summary>
+		/// 拉伸产生的 Cube 在该秒数后自动消失（<=0 表示不自动消失）
+		/// </summary>
+		public float ExtendedLifetimeSeconds;
     }
 
     public static class ExtendSettingsExtensions

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aba1032e6306ec74c84fe160c7c362a7, type: 3}
-  m_Name: CubeLayout 2
+  m_Name: CubeLayout2
   m_EditorClassIdentifier: 
   cellSize: 1
   origin: {x: 20, y: 0, z: 0}
@@ -1138,8 +1138,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: 12, y: 7, z: 11}
-    typeId: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
+    typeId: 3
+    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
   - coord: {x: 13, y: 5, z: 11}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -1162,8 +1162,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: 12, y: 7, z: 19}
-    typeId: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
+    typeId: 3
+    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
   - coord: {x: 13, y: 5, z: 19}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -2040,3 +2040,486 @@ MonoBehaviour:
   - coord: {x: 12, y: 6, z: 20}
     typeId: 1
     color: {r: 0.6039216, g: 0.7921569, b: 0.29803923, a: 1}
+  - coord: {x: 21, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 21, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 21, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 21, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 1, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 0, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 0, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 36}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 37}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 3, z: 34}
+    typeId: 3
+    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+  - coord: {x: 25, y: 0, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 0, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 0, z: 34}
+    typeId: 3
+    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+  - coord: {x: 11, y: 4, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 12, y: 4, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 26, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 2, z: 38}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 2, z: 39}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 30}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 31}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 32}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 31, y: 2, z: 33}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 22, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 23, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 24, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 25, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 26, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 27, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 28, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 2, z: 28}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 29, y: 2, z: 29}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
