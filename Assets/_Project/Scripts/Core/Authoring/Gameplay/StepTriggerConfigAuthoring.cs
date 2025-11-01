@@ -16,6 +16,7 @@ namespace Project.Core.Authoring
         {
             [Tooltip("Cube TypeId")] public int typeId = 1;
             [Tooltip("变色颜色")] public Color color = Color.yellow;
+            [Tooltip("原始颜色")] public Color originalColor = Color.yellow;
             [Tooltip("发光强度")] [Range(0f, 8f)] public float emissionIntensity = 2f;
             [Tooltip("对应音效")] public AudioClip sfx;
         }
@@ -55,6 +56,7 @@ namespace Project.Core.Authoring
                 buffer.Add(new StepTriggerColor
                 {
                     TypeId = e.typeId,
+                    OriginalColor = new float4(e.originalColor.r, e.originalColor.g, e.originalColor.b, e.originalColor.a),
                     Color = new float4(e.color.r, e.color.g, e.color.b, e.color.a),
                     EmissionIntensity = e.emissionIntensity
                 });

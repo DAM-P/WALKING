@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea2cabc83f34b624da30831cc2aafd4c, type: 3}
-  m_Name: Stage3
+  m_Name: Stage6
   m_EditorClassIdentifier: 
-  stageName: Stage 3
+  stageName: Stage 6
   description: 
-  layout: {fileID: 11400000, guid: be7e7388f96fcc34fb654225449cecd8, type: 2}
+  layout: {fileID: 11400000, guid: 3fab6088649a42f4c913d9cd4025b8a9, type: 2}
   cubePrefab: {fileID: 3586884651521338107, guid: f1235321c56c2424d92a6a4651dcd1f8, type: 3}
   spawnPerFrame: 2048
   applyInstanceColor: 1

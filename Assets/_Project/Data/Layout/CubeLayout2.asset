@@ -1075,8 +1075,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: -3, y: 6, z: 2}
-    typeId: 3
-    color: {r: 0.7019608, g: 0.67058825, b: 0.6392157, a: 1}
+    typeId: 7
+    color: {r: 0.9433962, g: 0.5132312, b: 0.5132312, a: 1}
   - coord: {x: -4, y: 6, z: 4}
     typeId: 1
     color: {r: 0.6048401, g: 0.7924528, b: 0.29654676, a: 1}
@@ -1087,9 +1087,6 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: -4, y: 7, z: 5}
-    typeId: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - coord: {x: -4, y: 7, z: 4}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: -4, y: 7, z: 3}
@@ -1138,8 +1135,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: 12, y: 7, z: 11}
-    typeId: 3
-    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+    typeId: 7
+    color: {r: 0.9433962, g: 0.5132312, b: 0.5132312, a: 1}
   - coord: {x: 13, y: 5, z: 11}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -1162,8 +1159,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - coord: {x: 12, y: 7, z: 19}
-    typeId: 3
-    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+    typeId: 4
+    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
   - coord: {x: 13, y: 5, z: 19}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -2346,9 +2343,6 @@ MonoBehaviour:
   - coord: {x: 31, y: 0, z: 37}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
-  - coord: {x: 30, y: 2, z: 38}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 30, y: 2, z: 39}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
@@ -2358,16 +2352,7 @@ MonoBehaviour:
   - coord: {x: 31, y: 2, z: 39}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
-  - coord: {x: 30, y: 2, z: 34}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
-  - coord: {x: 30, y: 2, z: 35}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 30, y: 2, z: 36}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
-  - coord: {x: 30, y: 2, z: 37}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 31, y: 2, z: 34}
@@ -2383,8 +2368,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 31, y: 3, z: 34}
-    typeId: 3
-    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+    typeId: 5
+    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
   - coord: {x: 25, y: 0, z: 33}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
@@ -2395,8 +2380,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 26, y: 0, z: 34}
-    typeId: 3
-    color: {r: 0.62352943, g: 0.7176471, b: 0.96862745, a: 1}
+    typeId: 4
+    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
   - coord: {x: 11, y: 4, z: 7}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -2419,9 +2404,6 @@ MonoBehaviour:
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 28, y: 2, z: 39}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
-  - coord: {x: 29, y: 2, z: 38}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 29, y: 2, z: 39}
@@ -2523,3 +2505,309 @@ MonoBehaviour:
   - coord: {x: 29, y: 2, z: 29}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 34}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 30, y: 2, z: 35}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -8, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 2}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 3}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 4}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 5}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 6}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 3, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 2}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 3}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 4}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 5}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 6}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 2, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 2}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 3}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 4}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 5}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 6}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 1, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -8, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -7, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -6, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -5, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -3, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -2, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -1, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: -1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 0}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 1}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 2}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 3}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 4}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 5}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 6}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 7}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 8}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: 0, y: 0, z: 9}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}

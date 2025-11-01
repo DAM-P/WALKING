@@ -10,6 +10,10 @@ namespace Project.Core.Components
     public struct StepTriggerColor : IBufferElementData
     {
         public int TypeId;
+        /// <summary>
+        /// 原始底色（用于生成时覆盖 BaseColor）；为 (0,0,0,0) 则不覆盖
+        /// </summary>
+        public float4 OriginalColor;
         public float4 Color;
         public float EmissionIntensity;
     }

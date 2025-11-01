@@ -23,6 +23,16 @@ namespace Project.Core.Systems
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
+            // 读取 StepTriggerColor 配置（若存在）：用于按 TypeId 覆盖初始 BaseColor
+            DynamicBuffer<StepTriggerColor> stepColors = default;
+            bool hasStepColors = false;
+            var stepQuery = state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<StepTriggerColor>());
+            if (!stepQuery.IsEmpty)
+            {
+                hasStepColors = true;
+                stepColors = state.EntityManager.GetBuffer<StepTriggerColor>(SystemAPI.GetSingletonEntity<StepTriggerColor>());
+            }
+
             foreach (var (spawner, cells, entity) in SystemAPI.Query<RefRW<CubeLayoutSpawner>, DynamicBuffer<CubeCell>>().WithEntityAccess())
             {
                 int total = cells.Length;
@@ -81,6 +91,22 @@ namespace Project.Core.Systems
                     if (spawner.ValueRO.ApplyInstanceColor == 1)
                     {
                         var baseColor = new Unity.Mathematics.float4(cell.Color.x, cell.Color.y, cell.Color.z, cell.Color.w);
+                        if (hasStepColors)
+                        {
+                            // 按 TypeId 查找并覆盖为 StepTrigger 配置色
+                            for (int si = 0; si < stepColors.Length; si++)
+                            {
+                                if (stepColors[si].TypeId == cell.TypeId)
+                                {
+                                    var original = stepColors[si].OriginalColor;
+                                    if (!math.all(original == float4.zero))
+                                        baseColor = original;
+                                    else
+                                        baseColor = stepColors[si].Color;
+                                    break;
+                                }
+                            }
+                        }
                         if (math.all(baseColor == float4.zero)) baseColor = new float4(0.75f, 0.75f, 0.75f, 1f);
                         ecb.AddComponent(e, new URPMaterialPropertyBaseColor { Value = baseColor });
 

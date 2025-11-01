@@ -6,6 +6,7 @@ using Project.Core.Components;
 #if HAS_URP_MATERIAL_PROPERTY
 using Unity.Rendering;
 #endif
+using UnityEngine;
 
 namespace Project.Core.Systems
 {
@@ -39,6 +40,14 @@ namespace Project.Core.Systems
 
 				if (life.ValueRO.RemainingSeconds <= 0f)
 				{
+					// 销毁关联的 Collider GameObject（如果存在）
+					if (state.EntityManager.HasComponent<ColliderReference>(entity))
+					{
+						var cref = state.EntityManager.GetComponentData<ColliderReference>(entity);
+						var go = Resources.InstanceIDToObject(cref.GameObjectInstanceID) as GameObject;
+						if (go != null) Object.Destroy(go);
+						ecb.RemoveComponent<ColliderReference>(entity);
+					}
 					ecb.DestroyEntity(entity);
 				}
 			}
