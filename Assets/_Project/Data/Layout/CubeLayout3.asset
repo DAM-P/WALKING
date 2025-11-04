@@ -766,8 +766,8 @@ MonoBehaviour:
     typeId: 3
     color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
   - coord: {x: 40, y: 4, z: 18}
-    typeId: 4
-    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
+    typeId: 7
+    color: {r: 0.9372549, g: 0.49803922, b: 0.49803922, a: 1}
   - coord: {x: 33, y: 3, z: 17}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
@@ -1051,8 +1051,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 32, y: 8, z: 18}
-    typeId: 7
-    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
+    typeId: 4
+    color: {r: 0.9372549, g: 0.49803922, b: 0.49803922, a: 1}
   - coord: {x: 31, y: 5, z: 18}
     typeId: 1
     color: {r: 0.6039216, g: 0.7921569, b: 0.29803923, a: 1}
@@ -1462,8 +1462,8 @@ MonoBehaviour:
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
   - coord: {x: 24, y: 4, z: 18}
-    typeId: 4
-    color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
+    typeId: 3
+    color: {r: 0.9372549, g: 0.49803922, b: 0.49803922, a: 1}
   - coord: {x: 27, y: 4, z: 16}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}

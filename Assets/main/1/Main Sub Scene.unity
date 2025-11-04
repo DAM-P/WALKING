@@ -166,13 +166,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd4005400f46794eb89e04c32ffdf11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 3586884651521338107, guid: f1235321c56c2424d92a6a4651dcd1f8, type: 3}
+  cubePrefab: {fileID: 3586884651521338107, guid: 5e9bb6bce20d9fb4a82832bbfcd08655, type: 3}
   cubeSize: 1
   defaultColor: {r: 0.8, g: 0.8, b: 1, a: 1}
   applyInstanceColor: 1
   autoAddCollider: 1
   colliderActiveRadius: 20
   colliderDeactivateHysteresis: 3
+  extendedLifetimeSeconds: 5
 --- !u!1 &611034139
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,9 +219,88 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sequence: {fileID: 11400000, guid: 666995e1e945b1c41b47937a8b3b018e, type: 2}
+--- !u!1 &1075551317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1075551319}
+  - component: {fileID: 1075551318}
+  - component: {fileID: 1075551320}
+  m_Layer: 0
+  m_Name: WorldDanceSettingsAuthoring
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1075551318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075551317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ccfe8e3514091f4ca4593bd663d256e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetRadius: 20
+  gatherHeight: 50
+  scatterDuration: 4
+  scatterPower: 4
+  scatterNoise: 0.3
+  flightDuration: 20
+  delayStep: 0.1
+  sequenceIntervalSeconds: 30
+  ringEnabled: 1
+  ringInnerRadius: 24
+  ringOuterRadius: 38
+  ringTiltDeg: 10
+  ringShare: 0.25
+  planetSpinDegPerSec: 10
+  cubeSpinMinDegPerSec: 20
+  cubeSpinMaxDegPerSec: 60
+--- !u!4 &1075551319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075551317}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.557453, y: -35.651558, z: -2.6877458}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1075551320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075551317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f00104a97bd08394498df39f165096bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - stageIndex: 8
+    typeId: 3
+    useCoord: 1
+    coord: {x: 22, y: 35, z: 11}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 22124011}
   - {fileID: 611034140}
+  - {fileID: 1075551319}

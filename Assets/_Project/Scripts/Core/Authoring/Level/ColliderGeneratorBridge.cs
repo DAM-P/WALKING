@@ -31,6 +31,18 @@ namespace Project.Core.Authoring
 				_em.DestroyEntity(e);
 			}
 			entities.Dispose();
+
+			// destroy stage colliders requests
+			var dq = _em.CreateEntityQuery(typeof(DestroyStageCollidersRequest));
+			var dels = dq.ToEntityArray(Unity.Collections.Allocator.Temp);
+			for (int i = 0; i < dels.Length; i++)
+			{
+				var de = dels[i];
+				var d = _em.GetComponentData<DestroyStageCollidersRequest>(de);
+				TryDestroyStage(d.StageIndex);
+				_em.DestroyEntity(de);
+			}
+			dels.Dispose();
 		}
 
 		void TryGenerate(GenerateCollidersRequest req)
@@ -53,7 +65,17 @@ namespace Project.Core.Authoring
 				});
 			}
 
-			GameObject host = generatorPrefab != null ? Instantiate(generatorPrefab) : gameObject;
+			// create per-stage container
+			GameObject parent = gameObject;
+			string stageName = $"StageColliders_{req.StageIndex}";
+			Transform existing = parent.transform.Find(stageName);
+			GameObject host = existing != null ? existing.gameObject : new GameObject(stageName);
+			if (existing == null)
+			{
+				host.transform.SetParent(parent.transform);
+				host.transform.localPosition = Vector3.zero;
+				host.transform.localRotation = Quaternion.identity;
+			}
 			var gen = host.GetComponent<CubeLayoutColliderGenerator>();
 			if (gen == null) gen = host.AddComponent<CubeLayoutColliderGenerator>();
 			gen.layout = tmp;
@@ -63,6 +85,17 @@ namespace Project.Core.Authoring
 			gen.clearOldColliders = !preserveExistingColliders ? true : false;
 			gen.GenerateCollider();
 			Debug.Log($"[ColliderBridge] 已生成 PhysX 碰撞体（Box/Mesh），对象={host.name}");
+		}
+
+		void TryDestroyStage(int stageIndex)
+		{
+			string stageName = $"StageColliders_{stageIndex}";
+			var t = transform.Find(stageName);
+			if (t != null)
+			{
+				Destroy(t.gameObject);
+				Debug.Log($"[ColliderBridge] 已销毁关卡碰撞体容器: {stageName}");
+			}
 		}
 	}
 }

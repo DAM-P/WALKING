@@ -2811,3 +2811,6 @@ MonoBehaviour:
   - coord: {x: 0, y: 0, z: 9}
     typeId: 0
     color: {r: 1, g: 1, b: 1, a: 1}
+  - coord: {x: -4, y: 7, z: 4}
+    typeId: 0
+    color: {r: 1, g: 1, b: 1, a: 1}

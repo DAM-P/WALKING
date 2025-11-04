@@ -80,12 +80,13 @@ namespace Project.Core.Systems
 					Debug.Log($"[LevelProgression] 初始关加载完成 index={idx}, cells={cells.Length}");
 
 				// 生成 PhysX 碰撞体的请求（交给 Mono 桥接执行）
-				var req = ecb.CreateEntity();
-				ecb.AddComponent(req, new GenerateCollidersRequest
+					var req = ecb.CreateEntity();
+					ecb.AddComponent(req, new GenerateCollidersRequest
 				{
 					Layout = entry.Layout,
 					ColliderType = entry.ColliderType,
-					MergeMode = entry.MergeMode
+						MergeMode = entry.MergeMode,
+						StageIndex = idx
 				});
 			}
 
@@ -166,7 +167,7 @@ namespace Project.Core.Systems
 
 					// 请求生成碰撞体
 					var req = ecb.CreateEntity();
-					ecb.AddComponent(req, new GenerateCollidersRequest { Layout = entry.Layout, ColliderType = entry.ColliderType, MergeMode = entry.MergeMode });
+					ecb.AddComponent(req, new GenerateCollidersRequest { Layout = entry.Layout, ColliderType = entry.ColliderType, MergeMode = entry.MergeMode, StageIndex = idx });
 					Debug.Log($"[LevelProgression] 已请求生成碰撞体 type={entry.ColliderType}, merge={entry.MergeMode}");
 				}
 			}

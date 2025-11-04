@@ -51,6 +51,10 @@ namespace Project.Editor.GridBrush
 		private bool _hasHoverCell;
 		private CubeLayout.Cell _hoverCell;
 
+		// Copy/Paste buffer
+		private readonly List<CubeLayout.Cell> _copyBuffer = new List<CubeLayout.Cell>();
+		private Vector3Int _copySize = Vector3Int.zero; // size of copied bounds（用于提示）
+
         [MenuItem("Tools/Grid Brush")] 
         public static void Open()
         {
@@ -140,6 +144,31 @@ namespace Project.Editor.GridBrush
                 }
             }
 
+			// Copy/Paste controls
+			using (new EditorGUILayout.HorizontalScope("box"))
+			{
+				EditorGUILayout.LabelField("Copy/Paste", GUILayout.Width(80));
+				using (new EditorGUI.DisabledScope(_layout == null))
+				{
+					if (GUILayout.Button("Copy Rect/Preview"))
+					{
+						PerformCopyFromCurrent();
+					}
+					using (new EditorGUI.DisabledScope(_copyBuffer.Count == 0))
+					{
+						if (GUILayout.Button("Paste At Hover"))
+						{
+							if (_hasHover) PasteAt(_hoverCoord);
+						}
+					}
+				}
+				if (_copyBuffer.Count > 0)
+				{
+					GUILayout.FlexibleSpace();
+					EditorGUILayout.LabelField($"Copied: {_copyBuffer.Count} cells  Size: {_copySize.x}x{_copySize.y}x{_copySize.z}", EditorStyles.miniLabel);
+				}
+			}
+
             // Hover 信息显示
             using (new EditorGUILayout.VerticalScope("box"))
             {
@@ -191,6 +220,9 @@ namespace Project.Editor.GridBrush
                 DrawLayoutGizmos();
             }
 
+            // 键盘快捷键（需在 hasHit/snapped 计算之后处理）
+            // 将鼠标移动到 Scene 中后再按键，可使用粘贴到 Hover 或 Snapped 位置
+
             // 更新 Hover 信息（不论是否激活）
             Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
             bool hasHit = TryGetPlaneHit(ray, out var hitPoint);
@@ -199,6 +231,37 @@ namespace Project.Editor.GridBrush
             {
                 snapped = SnapToGrid(hitPoint, _layout.origin, _cellSize);
                 UpdateHover(snapped);
+            }
+
+            // 数字键设置 TypeId + 复制/粘贴快捷键（依赖 hasHit/snapped）
+            if (e.type == EventType.KeyDown)
+            {
+                int digit = -1;
+                if (e.keyCode >= KeyCode.Alpha0 && e.keyCode <= KeyCode.Alpha9)
+                    digit = (int)e.keyCode - (int)KeyCode.Alpha0;
+                else if (e.keyCode >= KeyCode.Keypad0 && e.keyCode <= KeyCode.Keypad9)
+                    digit = (int)e.keyCode - (int)KeyCode.Keypad0;
+                if (digit >= 0)
+                {
+                    _typeId = digit;
+                    Repaint();
+                    e.Use();
+                }
+
+                bool ctrl = e.control || e.command;
+                if (ctrl && e.keyCode == KeyCode.C)
+                {
+                    PerformCopyFromCurrent();
+                    e.Use();
+                }
+                else if (ctrl && e.keyCode == KeyCode.V)
+                {
+                    if (_copyBuffer.Count > 0 && hasHit)
+                    {
+                        PasteAt(snapped);
+                    }
+                    e.Use();
+                }
             }
 
             // 快捷键：按下 C 复制悬停格信息
@@ -556,6 +619,81 @@ namespace Project.Editor.GridBrush
             }
             EditorUtility.SetDirty(_layout);
         }
+
+		private void PerformCopyFromCurrent()
+		{
+			if (_layout == null) return;
+			// Determine bounds to copy: priority rectangle selection (if dragging), otherwise current preview bounds
+			Vector3Int min, max;
+			if (_rectangleMode && _isRectSelecting)
+			{
+				GetBounds(_rectStart, _hoverCoord, out min, out max);
+			}
+			else if (_previewCells.Count > 0)
+			{
+				GetBounds(_previewCells, out min, out max);
+			}
+			else
+			{
+				// fallback: single hover cell
+				min = max = _hoverCoord;
+			}
+			CopyFromBounds(min, max);
+		}
+
+		private void CopyFromBounds(Vector3Int min, Vector3Int max)
+		{
+			_copyBuffer.Clear();
+			Vector3Int size = new Vector3Int(Mathf.Abs(max.x - min.x) + 1, Mathf.Abs(max.y - min.y) + 1, Mathf.Abs(max.z - min.z) + 1);
+			// Normalize min<=max
+			Vector3Int nmin = new Vector3Int(Mathf.Min(min.x, max.x), Mathf.Min(min.y, max.y), Mathf.Min(min.z, max.z));
+			Vector3Int nmax = new Vector3Int(Mathf.Max(min.x, max.x), Mathf.Max(min.y, max.y), Mathf.Max(min.z, max.z));
+			for (int i = 0; i < _layout.cells.Count; i++)
+			{
+				var c = _layout.cells[i];
+				if (c.coord.x < nmin.x || c.coord.x > nmax.x) continue;
+				if (c.coord.y < nmin.y || c.coord.y > nmax.y) continue;
+				if (c.coord.z < nmin.z || c.coord.z > nmax.z) continue;
+				// store relative
+				var rel = new Vector3Int(c.coord.x - nmin.x, c.coord.y - nmin.y, c.coord.z - nmin.z);
+				_copyBuffer.Add(new CubeLayout.Cell { coord = rel, typeId = c.typeId, color = c.color });
+			}
+			_copySize = size;
+			ShowNotification(new GUIContent($"Copied: {_copyBuffer.Count} cells"));
+		}
+
+		private void PasteAt(Vector3Int targetMin)
+		{
+			if (_layout == null || _copyBuffer.Count == 0) return;
+			Undo.RecordObject(_layout, "Paste Cubes");
+			for (int i = 0; i < _copyBuffer.Count; i++)
+			{
+				var c = _copyBuffer[i];
+				var dst = new Vector3Int(targetMin.x + c.coord.x, targetMin.y + c.coord.y, targetMin.z + c.coord.z);
+				int idx = _layout.cells.FindIndex(x => x.coord == dst);
+				var cell = new CubeLayout.Cell { coord = dst, typeId = c.typeId, color = c.color };
+				if (idx >= 0) _layout.cells[idx] = cell; else _layout.cells.Add(cell);
+			}
+			EditorUtility.SetDirty(_layout);
+		}
+
+		private static void GetBounds(Vector3Int a, Vector3Int b, out Vector3Int min, out Vector3Int max)
+		{
+			min = new Vector3Int(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Min(a.z, b.z));
+			max = new Vector3Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
+		}
+
+		private static void GetBounds(HashSet<Vector3Int> set, out Vector3Int min, out Vector3Int max)
+		{
+			min = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
+			max = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
+			foreach (var c in set)
+			{
+				if (c.x < min.x) min.x = c.x; if (c.y < min.y) min.y = c.y; if (c.z < min.z) min.z = c.z;
+				if (c.x > max.x) max.x = c.x; if (c.y > max.y) max.y = c.y; if (c.z > max.z) max.z = c.z;
+			}
+			if (min.x == int.MaxValue) { min = max = Vector3Int.zero; }
+		}
 
         private Vector3Int RaycastSnapDown(Vector3Int coord)
         {

@@ -25,6 +25,9 @@ namespace Project.Core.Authoring
         [Tooltip("目标 Layer 名称")]
         public string targetLayerName = "Default";
 
+		[Header("UI")]
+		[Tooltip("是否显示屏幕右下角的工具UI")] public bool showUI = false;
+
         // 日志节流
         private int _lastInactiveCount = -1;
         private float _lastLogTime = 0f;
@@ -249,29 +252,30 @@ namespace Project.Core.Authoring
             Debug.Log("<color=green>[AutoFix] ✅ 已重置所有选择状态</color>");
         }
 
-        void OnGUI()
-        {
-            // 简单的 GUI 快捷按钮
-            GUILayout.BeginArea(new Rect(Screen.width - 210, Screen.height - 120, 200, 110));
-            GUILayout.Box("选择系统自动修复", GUILayout.Width(200));
+		void OnGUI()
+		{
+			if (!showUI) return;
+			// 简单的 GUI 快捷按钮
+			GUILayout.BeginArea(new Rect(Screen.width - 210, Screen.height - 120, 200, 110));
+			GUILayout.Box("选择系统自动修复", GUILayout.Width(200));
 
-            if (GUILayout.Button("执行完整修复"))
-            {
-                PerformFullFix();
-            }
+			if (GUILayout.Button("执行完整修复"))
+			{
+				PerformFullFix();
+			}
 
-            if (GUILayout.Button("验证设置"))
-            {
-                ValidateSetup();
-            }
+			if (GUILayout.Button("验证设置"))
+			{
+				ValidateSetup();
+			}
 
-            if (GUILayout.Button("重置选择状态"))
-            {
-                ResetAllSelectionStates();
-            }
+			if (GUILayout.Button("重置选择状态"))
+			{
+				ResetAllSelectionStates();
+			}
 
-            GUILayout.EndArea();
-        }
+			GUILayout.EndArea();
+		}
     }
 }
 

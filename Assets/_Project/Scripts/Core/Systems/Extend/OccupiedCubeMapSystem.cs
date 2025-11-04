@@ -42,6 +42,26 @@ namespace Project.Core.Systems
         {
             var mapSingleton = SystemAPI.GetSingletonRW<OccupiedCubeMap>();
 
+            // 动态扩容：当实体数量接近容量时，重建更大的哈希表，避免 "HashMap is full"
+            int currentCount = _cubeQuery.CalculateEntityCount();
+            if (mapSingleton.ValueRW.Map.IsCreated)
+            {
+                int cap = mapSingleton.ValueRW.Map.Capacity;
+                // 需要容量：当前数量的 1.5 倍 + 1024 缓冲
+                int needed = math.max(4096, currentCount + currentCount / 2 + 1024);
+                if (cap < needed)
+                {
+                    var newMap = new NativeParallelHashMap<int3, Entity>(needed, Allocator.Persistent);
+                    // 拷贝旧内容
+                    foreach (var kv in mapSingleton.ValueRW.Map)
+                    {
+                        newMap.TryAdd(kv.Key, kv.Value);
+                    }
+                    mapSingleton.ValueRW.Map.Dispose();
+                    mapSingleton.ValueRW.Map = newMap;
+                }
+            }
+
             // 注册新 Cube（使用 ParallelWriter 支持并行写入）
             var registerJob = new RegisterCubeJob
             {

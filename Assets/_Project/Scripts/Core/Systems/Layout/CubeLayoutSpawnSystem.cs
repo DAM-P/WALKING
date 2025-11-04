@@ -3,9 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-#if HAS_URP_MATERIAL_PROPERTY
 using Unity.Rendering;
-#endif
 using Project.Core.Authoring;
 using Project.Core.Components;
 
@@ -40,13 +38,19 @@ namespace Project.Core.Systems
                 if (spawned >= total) continue;
 
                 int batch = math.min(spawner.ValueRO.SpawnPerFrame, total - spawned);
+                // 读取 Prefab 的旋转与缩放，避免覆盖导致的包围盒/剔除问题
+                LocalTransform prefabLT = LocalTransform.Identity;
+                if (state.EntityManager.HasComponent<LocalTransform>(spawner.ValueRO.Prefab))
+                {
+                    prefabLT = state.EntityManager.GetComponentData<LocalTransform>(spawner.ValueRO.Prefab);
+                }
                 
                 for (int i = 0; i < batch; i++)
                 {
                     var cell = cells[spawned + i];
                     var e = ecb.Instantiate(spawner.ValueRO.Prefab);
                     float3 pos = spawner.ValueRO.Origin + (float3)cell.Coord * spawner.ValueRO.CellSize;
-                    ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(pos, quaternion.identity, 1f));
+                    ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(pos, prefabLT.Rotation, prefabLT.Scale));
                     
                     // 添加关卡标记（使用 Spawner 的 StageIndex）
                     ecb.AddComponent(e, new StageCubeTag { StageIndex = spawner.ValueRO.StageIndex });
@@ -117,6 +121,7 @@ namespace Project.Core.Systems
                         }
                     }
 #endif
+
                 }
 
                 spawner.ValueRW.SpawnedCount += batch;

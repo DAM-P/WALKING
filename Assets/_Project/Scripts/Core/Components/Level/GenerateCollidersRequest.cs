@@ -9,6 +9,13 @@ namespace Project.Core.Components
 		public BlobAssetReference<LayoutBlob> Layout;
 		public CubeLayoutColliderGenerator.ColliderType ColliderType;
 		public CubeLayoutColliderGenerator.MergeMode MergeMode;
+		public int StageIndex;
+	}
+
+	/// 请求销毁某一关生成的静态碰撞体
+	public struct DestroyStageCollidersRequest : IComponentData
+	{
+		public int StageIndex;
 	}
 }
 

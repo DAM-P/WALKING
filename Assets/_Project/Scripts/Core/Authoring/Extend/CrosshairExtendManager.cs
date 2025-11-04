@@ -63,6 +63,7 @@ namespace Project.Core.Authoring
         private int3 _baseAxis = int3.zero;
         private bool _isDragging = false;
         private bool _suppressPreviewOneFrame = false;
+		private RuntimePreviewOverlay _overlay;
 
         void Start()
         {
@@ -70,10 +71,17 @@ namespace Project.Core.Authoring
             if (World.DefaultGameObjectInjectionWorld != null)
                 _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             _selectionManager = FindObjectOfType<CubeSelectionManager>();
+			_overlay = FindObjectOfType<RuntimePreviewOverlay>();
+			if (_overlay == null)
+			{
+				var go = new GameObject("RuntimePreviewOverlay");
+				_overlay = go.AddComponent<RuntimePreviewOverlay>();
+			}
         }
 
         void Update()
         {
+            if (_overlay != null) _overlay.Begin();
             if (_entityManager == null) return;
             if (mainCamera == null)
             {
@@ -144,12 +152,17 @@ namespace Project.Core.Authoring
                     for (int i = 1; i <= _currentPreviewLen; i++)
                     {
                         float3 pos = startPosF + (float3)_axisDir * i;
-                        DrawWireCube(pos, 0.98f, new Color(0.2f, 0.6f, 1f, 0.8f));
+                            DrawWireCube(pos, 0.98f, new Color(0.2f, 0.6f, 1f, 0.8f));
+                            if (_overlay != null)
+                            {
+                                _overlay.AddBox((Vector3)pos, Vector3.one * 0.98f);
+                            }
                         float3 prev = i == 1 ? startPosF : startPosF + (float3)_axisDir * (i - 1);
                         Project.Core.Authoring.Debugging.DebugDraw.DrawLine(prev, pos, new Color(0.2f, 0.6f, 1f, 0.8f), 0f, true, Project.Core.Authoring.Debugging.DebugDraw.Channel.ExtendPreview);
                     }
                 }
             }
+            if (_overlay != null) _overlay.End();
             // 左键松开：结束
             if (Input.GetMouseButtonUp(0))
             {
