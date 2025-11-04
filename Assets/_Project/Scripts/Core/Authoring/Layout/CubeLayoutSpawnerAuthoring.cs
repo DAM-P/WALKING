@@ -16,6 +16,16 @@ namespace Project.Core.Authoring
         [Tooltip("每帧实例化数量上限，避免大布局一次性卡顿")]
         public int spawnPerFrame = 2048;
 
+		[Header("Rise In Transition")]
+		[Tooltip("生成后是否从下方向目标位置上升，形成逐个出现的效果")]
+		public bool riseInEnabled = true;
+		[Tooltip("上升起始高度 = cellSize * 此倍数（世界单位）")]
+		public float riseHeightMultiplier = 4f;
+		[Tooltip("单个方块上升用时（秒）")]
+		public float riseDuration = 0.6f;
+		[Tooltip("相邻方块的额外延迟（秒/个），用于排队一个一个出现")]
+		public float perCubeDelay = 0.01f;
+
         [Header("Instance Properties (URP)")]
         [Tooltip("将 CubeLayout 的颜色写入每实例 _BaseColor/_EmissionColor（需要 URP + Entities Graphics）")]
         public bool applyInstanceColor = true;
@@ -38,6 +48,11 @@ namespace Project.Core.Authoring
         public float EmissionIntensity;
         public int RemoveOnComplete; // bool as int
         public int StageIndex; // 所属关卡索引
+		// Rise-in settings (runtime-ready)
+		public int RiseEnabled; // bool as int
+		public float RiseHeight; // world units
+		public float RiseDuration;
+		public float RisePerCubeDelay;
     }
 
     public struct CubeCell : IBufferElementData
@@ -75,7 +90,11 @@ namespace Project.Core.Authoring
                 ApplyInstanceColor = authoring.applyInstanceColor ? 1 : 0,
                 EmissionIntensity = authoring.emissionIntensity,
                 RemoveOnComplete = authoring.removeOnComplete ? 1 : 0,
-                StageIndex = 0
+				StageIndex = 0,
+				RiseEnabled = authoring.riseInEnabled ? 1 : 0,
+				RiseHeight = (authoring.layout.cellSize > 0 ? authoring.layout.cellSize : 1f) * math.max(0f, authoring.riseHeightMultiplier),
+				RiseDuration = math.max(0.05f, authoring.riseDuration),
+				RisePerCubeDelay = math.max(0f, authoring.perCubeDelay)
             });
 
             var buffer = AddBuffer<CubeCell>(holder);

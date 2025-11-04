@@ -28,6 +28,11 @@ namespace Project.Core.Authoring
 			public int RemoveOnComplete; // bool as int
 			public CubeLayoutColliderGenerator.ColliderType ColliderType;
 			public CubeLayoutColliderGenerator.MergeMode MergeMode;
+				// Rise In per-stage settings
+				public int RiseEnabled; // bool as int
+				public float RiseHeightMultiplier;
+				public float RiseDuration;
+				public float RisePerCubeDelay;
 	}
 
 	public struct CubeCellData
@@ -104,7 +109,11 @@ namespace Project.Core.Authoring
 						EmissionIntensity = stage.emissionIntensity,
 						RemoveOnComplete = 1,
 						ColliderType = stage.colliderType,
-						MergeMode = stage.mergeMode
+						MergeMode = stage.mergeMode,
+						RiseEnabled = stage.riseInEnabled ? 1 : 0,
+						RiseHeightMultiplier = Mathf.Max(0f, stage.riseHeightMultiplier),
+						RiseDuration = Mathf.Max(0.05f, stage.riseDuration),
+						RisePerCubeDelay = Mathf.Max(0f, stage.perCubeDelay)
 					});
 				}
 			}

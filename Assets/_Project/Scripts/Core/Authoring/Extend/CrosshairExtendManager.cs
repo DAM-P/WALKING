@@ -639,10 +639,14 @@ namespace Project.Core.Authoring
             q.Dispose();
             var map = cubeMap.Map;
             int valid = 0;
+            int stageIndex = 0;
+            if (_entityManager.HasComponent<StageCubeTag>(_selected))
+                stageIndex = _entityManager.GetComponentData<StageCubeTag>(_selected).StageIndex;
             for (int i = 1; i <= req; i++)
             {
                 int3 pos = startPos + axis * i;
-                if (map.ContainsKey(pos)) break;
+                var key = new int4(pos.x, pos.y, pos.z, stageIndex);
+                if (map.ContainsKey(key)) break;
                 valid = i;
             }
             return valid;

@@ -43,7 +43,12 @@ namespace Project.Core.Systems
 					ApplyInstanceColor = entry.ApplyInstanceColor,
 					EmissionIntensity = entry.EmissionIntensity,
 					RemoveOnComplete = entry.RemoveOnComplete,
-					StageIndex = idx
+					StageIndex = idx,
+					// Per-stage rise-in
+					RiseEnabled = entry.RiseEnabled,
+					RiseHeight = math.max(0f, layout.Value.cellSize * entry.RiseHeightMultiplier),
+					RiseDuration = entry.RiseDuration,
+					RisePerCubeDelay = entry.RisePerCubeDelay
 				});
 				var buffer = ecb.AddBuffer<CubeCell>(holder);
 					ref var cells = ref layout.Value.cells;
@@ -72,8 +77,8 @@ namespace Project.Core.Systems
 							}
 						}
 					}
-					var progEntity = state.EntityManager.CreateEntity(typeof(StageStepProgress));
-					state.EntityManager.SetComponentData(progEntity, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
+					var progEntity = ecb.CreateEntity();
+					ecb.AddComponent(progEntity, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
 
 					// 标记已启动
 				seq.ValueRW.Started = 1;
@@ -127,7 +132,11 @@ namespace Project.Core.Systems
 						ApplyInstanceColor = entry.ApplyInstanceColor,
 						EmissionIntensity = entry.EmissionIntensity,
 						RemoveOnComplete = entry.RemoveOnComplete,
-						StageIndex = idx
+						StageIndex = idx,
+						RiseEnabled = entry.RiseEnabled,
+						RiseHeight = math.max(0f, layout.Value.cellSize * entry.RiseHeightMultiplier),
+						RiseDuration = entry.RiseDuration,
+						RisePerCubeDelay = entry.RisePerCubeDelay
 					});
 					ref var cells = ref layout.Value.cells;
 					// 写入 StepTrigger 目标计数
@@ -153,8 +162,8 @@ namespace Project.Core.Systems
 					}
 					else
 					{
-						var ent = state.EntityManager.CreateEntity(typeof(StageStepProgress));
-						state.EntityManager.SetComponentData(ent, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
+						var ent = ecb.CreateEntity();
+						ecb.AddComponent(ent, new StageStepProgress { StageIndex = idx, TotalToTrigger = totalToTrigger, Triggered = 0 });
 					}
 
 					var buffer = ecb.AddBuffer<CubeCell>(holder);

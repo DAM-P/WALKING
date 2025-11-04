@@ -1102,7 +1102,7 @@ MonoBehaviour:
   autoStopOnEnd: 1
   lastStartTime: 0
   lastClipLength: 0
-  endFadeSeconds: 1
+  endFadeSeconds: 4
 --- !u!82 &394124785
 AudioSource:
   m_ObjectHideFlags: 0

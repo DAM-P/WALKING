@@ -26,3 +26,7 @@ MonoBehaviour:
   resetCamera: 0
   transitionDuration: 1
   transitionType: 1
+  riseInEnabled: 1
+  riseHeightMultiplier: 25
+  riseDuration: 1.2
+  perCubeDelay: 0.01

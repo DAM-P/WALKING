@@ -35,7 +35,10 @@ namespace Project.Core.Systems
             if (current.Equals(last))
                 return;
 
-            if (map.IsInitialized && map.Map.IsCreated && map.Map.TryGetValue(current, out Entity cube))
+            int stageForLookup = 0;
+            if (SystemAPI.TryGetSingleton<StageStepProgress>(out var progSingleton)) stageForLookup = progSingleton.StageIndex;
+            var key = new int4(current.x, current.y, current.z, stageForLookup);
+            if (map.IsInitialized && map.Map.IsCreated && map.Map.TryGetValue(key, out Entity cube))
             {
                 var ecb = SystemAPI
                     .GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()

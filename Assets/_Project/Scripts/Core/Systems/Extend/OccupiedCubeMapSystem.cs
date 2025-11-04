@@ -28,7 +28,7 @@ namespace Project.Core.Systems
             var singleton = new OccupiedCubeMap
             {
                 // 提高初始容量，避免并行写入时容量不足
-                Map = new NativeParallelHashMap<int3, Entity>(math.max(initialCapacity, 4096), Allocator.Persistent),
+                Map = new NativeParallelHashMap<int4, Entity>(math.max(initialCapacity, 4096), Allocator.Persistent),
                 IsInitialized = true
             };
             var singletonEntity = state.EntityManager.CreateEntity();
@@ -51,7 +51,7 @@ namespace Project.Core.Systems
                 int needed = math.max(4096, currentCount + currentCount / 2 + 1024);
                 if (cap < needed)
                 {
-                    var newMap = new NativeParallelHashMap<int3, Entity>(needed, Allocator.Persistent);
+                    var newMap = new NativeParallelHashMap<int4, Entity>(needed, Allocator.Persistent);
                     // 拷贝旧内容
                     foreach (var kv in mapSingleton.ValueRW.Map)
                     {
@@ -65,7 +65,9 @@ namespace Project.Core.Systems
             // 注册新 Cube（使用 ParallelWriter 支持并行写入）
             var registerJob = new RegisterCubeJob
             {
-                MapWriter = mapSingleton.ValueRW.Map.AsParallelWriter()
+                MapWriter = mapSingleton.ValueRW.Map.AsParallelWriter(),
+                RiseLookup = state.GetComponentLookup<CubeRiseIn>(true),
+                StageLookup = state.GetComponentLookup<StageCubeTag>(true)
             };
             registerJob.ScheduleParallel();
             state.Dependency.Complete();
@@ -91,7 +93,7 @@ namespace Project.Core.Systems
         /// </summary>
         private void CleanupDestroyedCubes(ref SystemState state, ref OccupiedCubeMap mapData)
         {
-            var entitiesToRemove = new NativeList<int3>(Allocator.Temp);
+            var entitiesToRemove = new NativeList<int4>(Allocator.Temp);
 
             // 查找已销毁的 Entity
             foreach (var kvp in mapData.Map)
@@ -118,27 +120,34 @@ namespace Project.Core.Systems
     [BurstCompile]
     public partial struct RegisterCubeJob : IJobEntity
     {
-        public NativeParallelHashMap<int3, Entity>.ParallelWriter MapWriter;
+        public NativeParallelHashMap<int4, Entity>.ParallelWriter MapWriter;
+        [ReadOnly] public ComponentLookup<CubeRiseIn> RiseLookup;
+        [ReadOnly] public ComponentLookup<StageCubeTag> StageLookup;
 
         public void Execute(Entity entity, ref CubeGridPosition gridPos, in LocalTransform transform)
         {
             if (gridPos.IsRegistered)
                 return;
 
-            // 计算网格坐标（四舍五入到整数）
+            // 若处于 RiseIn 过程，使用目标世界坐标，避免从起始下沉位置取整导致注册错误；否则用当前世界坐标
             var calculatedPos = new int3(math.round(transform.Position));
-
-            // 更新网格位置（如果变化了）
+            if (RiseLookup.HasComponent(entity))
+            {
+                var rise = RiseLookup[entity];
+                calculatedPos = new int3(math.round(rise.TargetPos));
+            }
             if (!gridPos.GridPosition.Equals(calculatedPos))
             {
                 gridPos.GridPosition = calculatedPos;
                 gridPos.IsRegistered = false; // 重新注册
             }
 
-            // 注册到哈希表（ParallelWriter 的 TryAdd 是线程安全的）
             if (!gridPos.IsRegistered)
             {
-                if (MapWriter.TryAdd(gridPos.GridPosition, entity))
+                int stage = 0;
+                if (StageLookup.HasComponent(entity)) stage = StageLookup[entity].StageIndex;
+                var key = new int4(gridPos.GridPosition.x, gridPos.GridPosition.y, gridPos.GridPosition.z, stage);
+                if (MapWriter.TryAdd(key, entity))
                 {
                     gridPos.IsRegistered = true;
                 }

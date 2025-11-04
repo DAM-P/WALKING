@@ -29,7 +29,7 @@ namespace Project.Core.Systems
             // 处理所有有预览的 Cube
             Entities
                 .WithAll<InteractableCubeTag, ExtendableTag>()
-                .ForEach((Entity entity, ref ExtendPreview preview, in LocalTransform transform, in SelectionState selection) =>
+                .ForEach((Entity entity, ref ExtendPreview preview, in LocalTransform transform, in SelectionState selection, in StageCubeTag stageTag) =>
                 {
                     if (selection.IsSelected == 0)
                     {
@@ -42,7 +42,7 @@ namespace Project.Core.Systems
                     int3 startPos = new int3(math.round(transform.Position));
 
                     // 碰撞检测，找到最大可拉伸长度
-                    int validLength = CalculateValidLength(startPos, preview.PreviewDirection, preview.PreviewLength, map);
+                    int validLength = CalculateValidLength(startPos, preview.PreviewDirection, preview.PreviewLength, map, stageTag.StageIndex);
 
                     preview.ValidLength = validLength;
                     preview.IsValid = validLength > 0;
@@ -56,7 +56,7 @@ namespace Project.Core.Systems
         /// <summary>
         /// 计算有效拉伸长度（碰撞检测）
         /// </summary>
-        private int CalculateValidLength(int3 startPos, int3 direction, int requestedLength, NativeParallelHashMap<int3, Entity> map)
+        private int CalculateValidLength(int3 startPos, int3 direction, int requestedLength, NativeParallelHashMap<int4, Entity> map, int stageIndex)
         {
             int validLength = 0;
 
@@ -65,7 +65,8 @@ namespace Project.Core.Systems
                 int3 testPos = startPos + direction * i;
 
                 // 检查该位置是否已被占用
-                if (map.ContainsKey(testPos))
+                var key = new int4(testPos.x, testPos.y, testPos.z, stageIndex);
+                if (map.ContainsKey(key))
                 {
                     // 碰撞，停止
                     break;

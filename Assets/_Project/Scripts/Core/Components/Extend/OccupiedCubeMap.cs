@@ -12,11 +12,11 @@ namespace Project.Core.Components
     {
         /// <summary>
         /// 坐标 → Entity 的映射表
-        /// Key: int3 坐标（整数网格坐标）
-        /// Value: Entity（占用该坐标的 Cube Entity）
+        /// Key: int4 坐标（x,y,z,stageIndex）
+        /// Value: Entity（占用该坐标的 Cube Entity；按关卡区分，避免叠关冲突）
         /// 使用 NativeParallelHashMap 支持并行写入
         /// </summary>
-        public NativeParallelHashMap<int3, Entity> Map;
+        public NativeParallelHashMap<int4, Entity> Map;
 
         /// <summary>
         /// 是否已初始化

@@ -47,6 +47,16 @@ namespace Project.Core.Authoring
         [Tooltip("过渡类型")]
         public TransitionType transitionType = TransitionType.Fade;
 
+		[Header("Rise In (逐个出现)")]
+		[Tooltip("生成时是否启用“从下方升起”效果")]
+		public bool riseInEnabled = true;
+		[Tooltip("起始下沉高度 = cellSize * 此倍数")]
+		public float riseHeightMultiplier = 4f;
+		[Tooltip("单个方块上升时长（秒）")]
+		public float riseDuration = 0.6f;
+		[Tooltip("相邻方块额外延迟（秒/个），用于排队一个一个出现")]
+		public float perCubeDelay = 0.01f;
+
         public enum TransitionType
         {
             Instant,    // 立即切换

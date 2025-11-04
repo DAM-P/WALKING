@@ -54,7 +54,7 @@ namespace Project.Core.Systems
             Entities
                 .WithAll<InteractableCubeTag, ExtendableTag>()
                 .WithoutBurst()
-                .ForEach((Entity rootEntity, ref ExtendableTag extendable, in ExtendExecutionRequest request, in LocalTransform rootTransform) =>
+                .ForEach((Entity rootEntity, ref ExtendableTag extendable, in ExtendExecutionRequest request, in LocalTransform rootTransform, in StageCubeTag stageTag) =>
                 {
                     // 计算起点坐标
                     int3 startPos = new int3(math.round(rootTransform.Position));
@@ -68,7 +68,8 @@ namespace Project.Core.Systems
                         int3 cubeGridPos = startPos + request.Direction * i;
 
                         // 再次检查碰撞（防止并发问题）
-                        if (cubeMap.Map.ContainsKey(cubeGridPos))
+                        var key = new int4(cubeGridPos.x, cubeGridPos.y, cubeGridPos.z, stageTag.StageIndex);
+                        if (cubeMap.Map.ContainsKey(key))
                         {
                             Debug.LogWarning($"[ExtendExecutionSystem] 位置 {cubeGridPos} 已被占用，停止拉伸。");
                             break;
@@ -117,7 +118,7 @@ namespace Project.Core.Systems
                         }
 
                         // 添加关卡标记（与静态 Cube 相同的 StageIndex）
-                        ecb.AddComponent(newCube, new StageCubeTag { StageIndex = 0 });
+                        ecb.AddComponent(newCube, new StageCubeTag { StageIndex = stageTag.StageIndex });
 
                         // 添加 Collider 标记（如果启用）
                         if (settings.AutoAddCollider)

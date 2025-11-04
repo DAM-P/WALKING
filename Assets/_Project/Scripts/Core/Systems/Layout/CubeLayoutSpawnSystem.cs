@@ -20,6 +20,7 @@ namespace Project.Core.Systems
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var elapsed = SystemAPI.Time.ElapsedTime;
 
             // 读取 StepTriggerColor 配置（若存在）：用于按 TypeId 覆盖初始 BaseColor
             DynamicBuffer<StepTriggerColor> stepColors = default;
@@ -50,15 +51,33 @@ namespace Project.Core.Systems
                     var cell = cells[spawned + i];
                     var e = ecb.Instantiate(spawner.ValueRO.Prefab);
                     float3 pos = spawner.ValueRO.Origin + (float3)cell.Coord * spawner.ValueRO.CellSize;
-                    ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(pos, prefabLT.Rotation, prefabLT.Scale));
+
+                    if (spawner.ValueRO.RiseEnabled == 1)
+                    {
+                        float3 startPos = pos + new float3(0f, -math.abs(spawner.ValueRO.RiseHeight), 0f);
+                        ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(startPos, prefabLT.Rotation, prefabLT.Scale));
+                        ecb.AddComponent(e, new CubeRiseIn
+                        {
+                            StartPos = startPos,
+                            TargetPos = pos,
+                            StartTime = (float)elapsed,
+                            Duration = spawner.ValueRO.RiseDuration,
+                            Delay = spawner.ValueRO.RisePerCubeDelay * (spawned + i)
+                        });
+                    }
+                    else
+                    {
+                        ecb.SetComponent(e, LocalTransform.FromPositionRotationScale(pos, prefabLT.Rotation, prefabLT.Scale));
+                    }
                     
                     // 添加关卡标记（使用 Spawner 的 StageIndex）
                     ecb.AddComponent(e, new StageCubeTag { StageIndex = spawner.ValueRO.StageIndex });
                     
-                    // 添加网格坐标（用于空间哈希表）
+                    // 添加网格坐标（用于空间哈希表）——使用世界坐标取整，统一坐标系
+                    int3 worldGrid = (int3)math.round(pos);
                     ecb.AddComponent(e, new CubeGridPosition 
                     { 
-                        GridPosition = cell.Coord,
+                        GridPosition = worldGrid,
                         IsRegistered = false
                     });
                     
