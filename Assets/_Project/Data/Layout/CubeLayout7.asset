@@ -1671,3 +1671,129 @@ MonoBehaviour:
   - coord: {x: 9, y: 8, z: 26}
     typeId: 3
     color: {r: 0.67058825, g: 0.62352943, b: 0.96862745, a: 1}
+  - coord: {x: -34, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -33, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -32, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -31, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -30, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -29, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -28, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -27, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -26, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -25, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -24, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -23, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -22, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -21, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -20, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -19, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -18, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -17, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -16, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -15, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -14, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -13, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -12, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -11, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -10, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -9, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -8, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -7, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -6, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -5, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -4, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -3, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -2, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: -1, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 0, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 1, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 2, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 3, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 4, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 5, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 6, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}
+  - coord: {x: 7, y: 26, z: 26}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 1}

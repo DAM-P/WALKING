@@ -594,24 +594,6 @@ MonoBehaviour:
   - coord: {x: 21, y: 37, z: -7}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0}
-  - coord: {x: 0, y: 0, z: -6}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - coord: {x: 0, y: 0, z: -5}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - coord: {x: 0, y: 0, z: -4}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - coord: {x: 0, y: 0, z: -45}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - coord: {x: 21, y: 0, z: -44}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - coord: {x: 0, y: 0, z: -45}
-    typeId: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
   - coord: {x: 23, y: 37, z: -44}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0}

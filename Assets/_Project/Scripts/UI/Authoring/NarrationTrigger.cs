@@ -15,6 +15,10 @@ public class NarrationTrigger : MonoBehaviour
 	public string requiredTag = "Player";
 	public KeyCode testKey = KeyCode.None;
 
+	[Header("One-shot")]
+	[Tooltip("开启后，本组件在首次触发后将不再重复触发")] public bool triggerOnlyOnce = false;
+	bool _hasTriggered = false;
+
 	[Header("Debug/Utility")]
 	public bool autoCreateManagerIfMissing = true;
 	public bool debugLog = false;
@@ -52,6 +56,8 @@ public class NarrationTrigger : MonoBehaviour
 
 	public void Enqueue()
 	{
+		if (triggerOnlyOnce && _hasTriggered) return;
+
 		if (manager == null) manager = FindObjectOfType<NarrationManager>();
 		if (manager == null && autoCreateManagerIfMissing)
 		{
@@ -64,20 +70,25 @@ public class NarrationTrigger : MonoBehaviour
 			if (debugLog) Debug.LogWarning("[NarrationTrigger] No NarrationManager found. Cannot enqueue.", this);
 			return;
 		}
+		bool didEnqueue = false;
 		if (!string.IsNullOrEmpty(overrideText))
 		{
 			float? dur = overrideDuration >= 0f ? (float?)overrideDuration : null;
 			manager.EnqueueText(overrideText, overrideVoice, dur);
+			didEnqueue = true;
 		}
 		else if (!string.IsNullOrEmpty(key))
 		{
 			if (debugLog) Debug.Log($"[NarrationTrigger] EnqueueKey: {key}", this);
 			manager.EnqueueKey(key, database);
+			didEnqueue = true;
 		}
 		else
 		{
 			if (debugLog) Debug.LogWarning("[NarrationTrigger] Neither overrideText nor key provided.", this);
 		}
+
+		if (didEnqueue && triggerOnlyOnce) _hasTriggered = true;
 	}
 }
 
