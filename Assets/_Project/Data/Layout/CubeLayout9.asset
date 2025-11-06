@@ -612,12 +612,18 @@ MonoBehaviour:
   - coord: {x: 21, y: 37, z: -47}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0.8666667}
-  - coord: {x: 21, y: 37, z: -44}
-    typeId: 0
-    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0.9411765}
   - coord: {x: 21, y: 37, z: -45}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0.9411765}
   - coord: {x: 23, y: 37, z: -45}
     typeId: 0
     color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0.9411765}
+  - coord: {x: 21, y: 37, z: -6}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0}
+  - coord: {x: 21, y: 37, z: -5}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0}
+  - coord: {x: 21, y: 37, z: -4}
+    typeId: 0
+    color: {r: 0.9098039, g: 0.8901961, b: 1, a: 0}

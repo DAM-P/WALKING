@@ -48,6 +48,9 @@ namespace Project.Core.Systems
                 return;
             }
 
+            // 获取玩家当前脚下栅格（用于限制：不在玩家所在位置生成方块）
+            bool hasPlayerFoot = SystemAPI.TryGetSingleton<PlayerGridFoot>(out var playerFoot);
+
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // 处理所有拉伸请求
@@ -66,6 +69,13 @@ namespace Project.Core.Systems
                     for (int i = startIndex + 1; i <= endIndex; i++)
                     {
                         int3 cubeGridPos = startPos + request.Direction * i;
+
+                        // 限制：不在玩家“所在位置”（脚下栅格的上方一格）生成方块
+                        if (hasPlayerFoot &&(cubeGridPos.Equals(playerFoot.CurrentCell + new int3(0, 1, 0)) || cubeGridPos.Equals(playerFoot.CurrentCell + new int3(0, 2, 0))))
+                        {
+                            // 跳过该格子，继续后续位置
+                            continue;
+                        }
 
                         // 再次检查碰撞（防止并发问题）
                         var key = new int4(cubeGridPos.x, cubeGridPos.y, cubeGridPos.z, stageTag.StageIndex);

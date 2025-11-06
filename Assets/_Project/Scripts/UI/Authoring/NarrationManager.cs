@@ -20,6 +20,12 @@ public class NarrationManager : MonoBehaviour
 	public bool backgroundAutoSize = true;
 	[Range(0.2f, 1f)] public float backgroundMaxWidthPercent = 0.9f;
 	public float backgroundMinWidth = 200f;
+
+	[Header("Text Effects")]
+	public bool enableOutline = true;
+	public Color outlineColor = new Color(0f, 0f, 0f, 0.95f);
+	public Vector2 outlineDistance = new Vector2(1.5f, -1.5f);
+	public bool outlineUseGraphicAlpha = true;
 	[Header("Debug")]
 	public bool debugLog = false;
 	public bool overrideSorting = true;
@@ -58,6 +64,8 @@ public class NarrationManager : MonoBehaviour
 			if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
 			audioSource.playOnAwake = false;
 		}
+		// 应用文字描边等特效
+		EnsureTextOutline();
 		// 默认隐藏
 		Hide();
 	}
@@ -139,6 +147,30 @@ public class NarrationManager : MonoBehaviour
 			rt.anchoredPosition = Vector2.zero;
 			var le = text.gameObject.GetComponent<LayoutElement>();
 			if (le == null) le = text.gameObject.AddComponent<LayoutElement>();
+			// 新建时也应用描边
+			EnsureTextOutline();
+		}
+		else
+		{
+			// 若场景中预置了 Text，也要应用描边配置
+			EnsureTextOutline();
+		}
+	}
+
+	void EnsureTextOutline()
+	{
+		if (text == null) return;
+		var outline = text.GetComponent<Outline>();
+		if (enableOutline)
+		{
+			if (outline == null) outline = text.gameObject.AddComponent<Outline>();
+			outline.effectColor = outlineColor;
+			outline.effectDistance = outlineDistance;
+			outline.useGraphicAlpha = outlineUseGraphicAlpha;
+		}
+		else
+		{
+			if (outline != null) Destroy(outline);
 		}
 	}
 
